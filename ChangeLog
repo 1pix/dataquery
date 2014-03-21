@@ -1,3 +1,7 @@
+2014-03-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Ensured preservation of localized uid information in data structure, resolves #57155
+
 2013-10-15 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Adjusted SQL definition to fit TYPO3 Instal Tool, resolves #51967

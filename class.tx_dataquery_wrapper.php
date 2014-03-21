@@ -462,7 +462,12 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 					foreach ($subParts as $alias => $subRow) {
 						if (isset($subRow)) {
 							foreach ($subRow as $field => $value) {
-								$overlaidRecord[$reverseColumnsMappings[$alias][$field]] = $value;
+								// Remap fields, except for special key "_LOCALIZED_UID"
+								if ($field === '_LOCALIZED_UID') {
+									$overlaidRecord[$field] = $value;
+								} else {
+									$overlaidRecord[$reverseColumnsMappings[$alias][$field]] = $value;
+								}
 							}
 						}
 						else {
@@ -555,11 +560,16 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 
 						// There are multiple tables
 					} else {
+						// If field is special field "_LOCALIZED_UID", keep its name as is
+						if ($fieldName === '_LOCALIZED_UID') {
+							$finalFieldName = '_LOCALIZED_UID';
+						} else {
 							// Get the field's true name
-						$finalFieldName = $columnsMappings[$fieldName]['mapping']['field'];
+							$finalFieldName = $columnsMappings[$fieldName]['mapping']['field'];
 							// However, if the field had an explicit alias, use that alias
-						if (isset($columnsMappings[$fieldName]['mapping']['alias'])) {
-							$finalFieldName = $columnsMappings[$fieldName]['mapping']['alias'];
+							if (isset($columnsMappings[$fieldName]['mapping']['alias'])) {
+								$finalFieldName = $columnsMappings[$fieldName]['mapping']['alias'];
+							}
 						}
 							// Field belongs to a subtable
 						if (in_array($columnsMappings[$fieldName]['mapping']['table'], $subtables)) {
