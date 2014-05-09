@@ -464,13 +464,19 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 							foreach ($subRow as $field => $value) {
 								// Remap fields, except for special key "_LOCALIZED_UID"
 								if ($field === '_LOCALIZED_UID') {
-									$overlaidRecord[$field] = $value;
+									// Differentiate main table and sub-tables
+									if ($alias == $this->mainTable) {
+										$key = '_LOCALIZED_UID';
+									} else {
+										$key = $alias . '$_LOCALIZED_UID';
+									}
+									$overlaidRecord[$key] = $value;
 								} else {
 									$overlaidRecord[$reverseColumnsMappings[$alias][$field]] = $value;
 								}
 							}
-						}
-						else {
+						// If the record for main table does not exist anymore, remove it entirely
+						} else {
 							if ($alias == $this->mainTable) {
 								unset($overlaidRecord);
 								break;
@@ -553,43 +559,58 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 				}
 				$recordsPerTable = array();
 				foreach ($row as $fieldName => $fieldValue) {
-						// The query contains no joined table
-						// All fields belong to the main table
+					// The query contains no joined table
+					// All fields belong to the main table
 					if ($numSubtables == 0) {
-						$recordsPerTable[$this->mainTable][$columnsMappings[$fieldName]['mapping']['field']] = $fieldValue;
-
-						// There are multiple tables
-					} else {
 						// If field is special field "_LOCALIZED_UID", keep its name as is
 						if ($fieldName === '_LOCALIZED_UID') {
 							$finalFieldName = '_LOCALIZED_UID';
+
+						// Otherwise, use mapped name
 						} else {
-							// Get the field's true name
+							$finalFieldName = $columnsMappings[$fieldName]['mapping']['field'];
+						}
+						$recordsPerTable[$this->mainTable][$finalFieldName] = $fieldValue;
+
+					// There are multiple tables
+					} else {
+						// If field is special field "_LOCALIZED_UID" (possibly prepended with table name),
+						// keep it as is
+						if (strpos($fieldName, '_LOCALIZED_UID') !== FALSE) {
+							// Handle main table and sub-tables separately
+							if ($fieldName === '_LOCALIZED_UID') {
+								$recordsPerTable[$this->mainTable]['_LOCALIZED_UID'] = $fieldValue;
+							} else {
+								list($table, $finalFieldName) = explode('$', $fieldName);
+								$recordsPerTable[$table]['_LOCALIZED_UID'] = $fieldValue;
+							}
+						// For other fields, get the field's true name
+						} else {
 							$finalFieldName = $columnsMappings[$fieldName]['mapping']['field'];
 							// However, if the field had an explicit alias, use that alias
 							if (isset($columnsMappings[$fieldName]['mapping']['alias'])) {
 								$finalFieldName = $columnsMappings[$fieldName]['mapping']['alias'];
 							}
-						}
-							// Field belongs to a subtable
-						if (in_array($columnsMappings[$fieldName]['mapping']['table'], $subtables)) {
-							$subtableName = $columnsMappings[$fieldName]['mapping']['table'];
-							if (isset($fieldValue)) {
-								$recordsPerTable[$subtableName][$finalFieldName] = $fieldValue;
-							}
 
+							// Field belongs to a subtable
+							if (in_array($columnsMappings[$fieldName]['mapping']['table'], $subtables)) {
+								$subtableName = $columnsMappings[$fieldName]['mapping']['table'];
+								if (isset($fieldValue)) {
+									$recordsPerTable[$subtableName][$finalFieldName] = $fieldValue;
+								}
 							// Else assume the field belongs to the main table
-						} else {
-							$recordsPerTable[$this->mainTable][$finalFieldName] = $fieldValue;
+							} else {
+								$recordsPerTable[$this->mainTable][$finalFieldName] = $fieldValue;
+							}
 						}
 					}
 				}
-					// If we're handling a record we haven't handled before, store the current information for the main table
+				// If we're handling a record we haven't handled before, store the current information for the main table
 				if (!array_key_exists($currentUID, $handledUids)) {
 					$rows[$this->mainTable][0][] = $recordsPerTable[$this->mainTable];
 					$handledUids[$currentUID] = $currentUID;
 				}
-					// Store information for each subtable
+				// Store information for each subtable
 				if ($numSubtables > 0) {
 					foreach ($subtables as $table) {
 						if (isset($recordsPerTable[$table]) && count($recordsPerTable[$table]) > 0) {
@@ -598,8 +619,9 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 					}
 				}
 			}
-				// Clean up a potentially large array that is not used anymore
+			// Clean up a potentially large array that is not used anymore
 			unset($finalRecordset);
+			unset($recordsPerTable);
 //t3lib_utility_Debug::debug($rows, 'De-JOINed tables');
 
 				// Now loop on all the records of the main table and join them to their subtables
