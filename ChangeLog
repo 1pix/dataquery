@@ -2,6 +2,7 @@
 
 	* Compatibility verified with TYPO3 CMS 6.2, resolves #58603
 	* Added hook to cache hash calculation process, resolves #58601
+	* Released to TER as version 1.10.0, resolves #58604
 
 2014-03-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
