@@ -1,3 +1,7 @@
+2014-05-09 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Compatibility verified with TYPO3 CMS 6.2, resolves #58603
+
 2014-03-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Ensured preservation of localized uid information in data structure, resolves #57155
