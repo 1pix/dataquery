@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2012 Francois Suter (Cobweb) <typo3@cobweb.ch>
+*  (c) 2007-2014 Francois Suter (Cobweb) <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,11 +26,9 @@
  * Wrapper for data query
  * This class is used to get the results of a specific data query
  *
- * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package		TYPO3
- * @subpackage	tx_dataquery
- *
- * $Id$
+ * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
+ * @package TYPO3
+ * @subpackage tx_dataquery
  */
 class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 	public $extKey = 'dataquery';
@@ -926,33 +924,43 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 	 * This method assembles a hash parameter depending on a variety of parameters, including
 	 * the current FE language and the groups of the current FE user, if any
 	 *
-	 * @param	array	$parameters: additional parameters to add to the hash calculation
-	 * @return	string	A md5 hash
+	 * @param array $parameters Additional parameters to add to the hash calculation
+	 * @return string A md5 hash
 	 */
 	protected function calculateCacheHash(array $parameters) {
-			// The base of the hash parameters is the current filter
-			// To this we add the uidList (if it exists)
-			// This makes it possible to vary the cache as a function of the idList provided by the input structure
+		// The base of the hash parameters is the current filter
+		// To this we add the uidList (if it exists)
+		// This makes it possible to vary the cache as a function of the idList provided by the input structure
 		$filterForCache = $this->filter;
 		if (is_array($this->structure) && isset($this->structure['uidListWithTable'])) {
 			$filterForCache['uidListWithTable'] = $this->structure['uidListWithTable'];
 		}
-			// If some parameters were given, add them to the base cache parameters
+		// If some parameters were given, add them to the base cache parameters
 		$cacheParameters = $filterForCache;
 		if (is_array($parameters) && count($parameters) > 0) {
 			$cacheParameters = array_merge($cacheParameters, $parameters);
 		}
-			// Finally we add other parameters of unicity:
-			//	- the current FE language
-			//	- the groups of the currently logged in FE user (if any)
-			//	- the type of structure
+		// Finally we add other parameters of uniqueness:
+		//	- the current FE language
+		//	- the groups of the currently logged in FE user (if any)
+		//	- the type of structure
 		$cacheParameters['sys_language_uid'] = $GLOBALS['TSFE']->sys_language_content;
 		if (is_array($GLOBALS['TSFE']->fe_user->user) && count($GLOBALS['TSFE']->fe_user->groupData['uid']) > 0) {
 			$cacheParameters['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		}
 		$cacheParameters['structure_type'] = $this->dataStructureType;
-			// Calculate the hash using the method provided by the base controller,
-			// which filters out the "limit" part of the filter
+		// Go through a hook for manipulating cache parameters
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['dataquery']['processCacheHashParameters'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['dataquery']['processCacheHashParameters'] as $className) {
+				/** @var $processor tx_dataquery_cacheParametersProcessor */
+				$processor = t3lib_div::getUserObj($className);
+				if ($processor instanceof tx_dataquery_cacheParametersProcessor) {
+					$cacheParameters = $processor->processCacheParameters($cacheParameters, $this);
+				}
+			}
+		}
+		// Calculate the hash using the method provided by the base controller,
+		// which filters out the "limit" part of the filter
 		return tx_tesseract_utilities::calculateFilterCacheHash($cacheParameters);
 	}
 

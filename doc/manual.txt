@@ -3,7 +3,7 @@ EXT: SQL-based Data Provider
 Extension Key: dataquery
 Language: en
 Keywords: forAdmins, forIntermediates, tesseract
-Copyright 2007-2012, Francois Suter, <typo3@cobweb.ch>
+Copyright 2007-2014, Francois Suter, <typo3@cobweb.ch>
 
 This document is published under the Open Content License
 available from http://www.opencontent.org/opl.shtml
@@ -284,6 +284,9 @@ Both hooks receive as arguments the full Data Structure as well as a back-refere
 Skeleton code for both hooks can be found in samples/class.tx_dataquery_sample_hook.php.
 Another hook is available for manipulating the tables and fields information:
 postProcessFieldInformation: this hook is inside tx_dataquery_wrapper::getTablesAndFields(), a method which is called when "dataquery" provides Data Consumers with a list of available tables and fields while working within the TYPO3 backend (this is how, for example, "templatedisplay" knows which fields to map). This hook can be used when the data structure has been modified by one of the above hooks and such changes need to be known in the backend too. This is generally the case when the hooks change the tables and fields structure, so that these changed elements can be mapped properly.
+Finally a hook can be used during cache hash calculation, for manipulating the parameters used to calculate the hash:
+ProcessCacheHashParameters: this hook is called inside tx_dataquery_wrapper::calculateCacheHash(). It receives as arguments the current cache parameters (an associative array) and a back-reference to the calling object (an instance of tx_dataquery_wrapper). It is expected to return the full array of cache parameters, whether it modified them or not.
+Classes using this hook must implement interface tx_dataquery_cacheParametersProcessor.
 Known problems
 The following problems have been identified:
 RIGHT JOINs will not produce a correct Data Structure (i.e. the orphan elements on the right side of the join do not appear).
