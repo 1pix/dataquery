@@ -127,7 +127,7 @@ class tx_dataquery_wrapper extends tx_tesseract_providerbase {
 					$query = $this->sqlParser->buildQuery();
 					$this->controller->addMessage(
 						$this->extKey,
-						'Query parsed and rebuilt successfully',
+						sprintf('Query parsed and rebuilt successfully (%s)', $this->providerData['title']),
 						'',
 						t3lib_FlashMessage::OK,
 						$query
