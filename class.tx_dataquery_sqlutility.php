@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 Francois Suter (Cobweb) <typo3@cobweb.ch>
+*  (c) 2012-2015 Francois Suter (Cobweb) <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,11 +28,27 @@
  * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_dataquery
- *
- * $Id$
  */
 final class tx_dataquery_SqlUtility {
+	/**
+	 * @var Tx_Dataquery_Parser_Fulltext Local instance of full text parser utility
+	 */
+	static protected $fulltextParser = NULL;
+
+	/**
+	 * Transforms a condition transmitted by data-filter to a real SQL segment.
+	 *
+	 * @throws tx_tesseract_exception
+	 * @param string $field
+	 * @param string $table
+	 * @param array $conditionData
+	 *              + operator: andgroup, orgroup, like, start, fulltext
+	 *              + value: the value given as input
+	 *              + negate: negate the expression
+	 * @return string
+	 */
 	static public function conditionToSql($field, $table, $conditionData) {
+
 		$condition = '';
 			// If the value is special value "\all", all values must be taken,
 			// so the condition is simply ignored
@@ -77,7 +93,7 @@ final class tx_dataquery_SqlUtility {
 					$condition = 'NOT (' . $condition . ')';
 				}
 
-				// If the operator is "like", "start" or "end", the SQL operator is always LIKE, but different wildcards are used
+			// If the operator is "like", "start" or "end", the SQL operator is always LIKE, but different wildcards are used
 			} elseif ($conditionData['operator'] == 'like' || $conditionData['operator'] == 'start' || $conditionData['operator'] == 'end') {
 					// Make sure values are an array
 				$values = $conditionData['value'];
@@ -104,8 +120,20 @@ final class tx_dataquery_SqlUtility {
 					$condition = 'NOT (' . $condition . ')';
 				}
 
-				// Other operators are handled simply
-				// We just need to take care of special values: "\empty" and "\null"
+			// Operator "fulltext" requires some special care, as a full MATCH() condition must be assembled
+			} elseif ($conditionData['operator'] == 'fulltext' || $conditionData['operator'] == 'fulltext_natural') {
+				$fulltextParser = self::getFulltextParserInstance();
+				$fulltextParts = explode('.', $field);
+				$condition = $fulltextParser->parse(
+					$table,
+					$fulltextParts[2],
+					$conditionData['value'],
+					($conditionData['operator'] == 'fulltext_natural'),
+					$conditionData['negate']
+				);
+
+			// Other operators are handled simply
+			// We just need to take care of special values: "\empty" and "\null"
 			} else {
 				$operator = $conditionData['operator'];
 					// Make sure values are an array
@@ -142,6 +170,29 @@ final class tx_dataquery_SqlUtility {
 			}
 		}
 		return $condition;
+	}
+
+	/**
+	 * Returns an instance of Tx_Dataquery_Parser_Fulltext, which is created on demand.
+	 *
+	 * @return Tx_Dataquery_Parser_Fulltext
+	 */
+	static public function getFulltextParserInstance() {
+		if (self::$fulltextParser === NULL) {
+			self::$fulltextParser = t3lib_div::makeInstance('Tx_Dataquery_Parser_Fulltext');
+		}
+		return self::$fulltextParser;
+	}
+
+	/**
+	 * Sets the fulltext parser instance.
+	 *
+	 * This is used for unit tests.
+	 *
+	 * @param Tx_Dataquery_Parser_Fulltext $fulltextParser
+	 */
+	static public function setFulltextParserInstance($fulltextParser) {
+		self::$fulltextParser = $fulltextParser;
 	}
 }
 ?>

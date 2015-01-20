@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!-- $Id$-->
 <T3locallang>
 	<meta type="array">
 		<type>database</type>
@@ -12,6 +11,7 @@
 			<label index="tx_dataquery_queries.title">Title</label>
 			<label index="tx_dataquery_queries.description">Description</label>
 			<label index="tx_dataquery_queries.sql_query">SQL Query</label>
+			<label index="tx_dataquery_queries.fulltext_indices">Full Text Indices</label>
 			<label index="tx_dataquery_queries.cache_duration">Cache duration (in seconds)</label>
 			<label index="tx_dataquery_queries.ignore_enable_fields">Ignore enable fields</label>
 			<label index="tx_dataquery_queries.ignore_enable_fields.I.0">Don't ignore any fields</label>
@@ -27,6 +27,15 @@
 			<label index="wizards.add_dataquery">Add a new Data Query</label>
 			<label index="tx_datafilter_filters.tx_dataquery_sql">Additional SQL WHERE clause</label>
 			<label index="sql">SQL</label>
+			<label index="fulltext.no_query">To check for FULLTEXT indices, please write a query first and save it at least once.</label>
+			<label index="fulltext.table_name">Table (with FULLTEXT index)</label>
+			<label index="fulltext.fulltext_fields">Fields composing the FULLTEXT index</label>
+			<label index="fulltext.no_index_or_missing_table">No FULLTEXT index found for this table or incomplete SQL query.</label>
+			<label index="fulltext.no_index">No FULLTEXT index for table "%s".</label>
+			<label index="fulltext.tables_list">FULLTEXT index found in table(s): %s</label>
+			<label index="fulltext.no_table_found">Actually, I couldn't find any tables having a FULLTEXT index.</label>
+			<label index="fulltext.indexed_fields">where "%s" is an index composed by fields: %s</label>
+			<label index="fulltext.syntax_for_query">Marker to be placed in the SELECT part:</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="tx_dataquery_queries">Requête</label>

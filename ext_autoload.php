@@ -1,8 +1,6 @@
 <?php
-/* 
+/*
  * Register necessary class names with autoloader
- *
- * $Id$
  */
 $extensionPath = t3lib_extMgm::extPath('dataquery');
 return array(
@@ -13,5 +11,8 @@ return array(
 	'tx_dataquery_queryobject' => $extensionPath . 'class.tx_dataquery_queryobject.php',
 	'tx_dataquery_sqlparser' => $extensionPath . 'class.tx_dataquery_sqlparser.php',
 	'tx_dataquery_wrapper' => $extensionPath . 'class.tx_dataquery_wrapper.php',
+	'tx_dataquery_utility_databaseanalyser'  => $extensionPath . 'Classes/Utility/DatabaseAnalyser.php',
+	'tx_dataquery_parser_fulltext'  => $extensionPath . 'Classes/Parser/Fulltext.php',
+	'tx_dataquery_userfunc_formengine'  => $extensionPath . 'Classes/Userfunc/FormEngine.php',
 );
 ?>

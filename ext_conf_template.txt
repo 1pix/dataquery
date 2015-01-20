@@ -2,3 +2,6 @@
 
 # cat=basic/limits/; type=integer; label=Cache limit: Limit size (in bytes) beyond which the cache is not written to preserve the database. Leave empty or set to 0 for no limits.
 cacheLimit = 1000000
+
+# cat=basic/enable/; type=integer; label=Minimum word length: The minimum length of words in the full text index. This must be at least the value of the ft_min_word_len variable in the MySQL server configuration.
+fullTextMinimumWordLength = 4

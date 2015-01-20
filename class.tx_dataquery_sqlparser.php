@@ -180,8 +180,8 @@ class tx_dataquery_sqlparser {
 				case 'MERGED':
 					$this->isMergedResult = true;
 					break;
- *
- */
+*
+*/
 			}
 		}
 			// Free some memory
@@ -308,7 +308,7 @@ class tx_dataquery_sqlparser {
 			return;
 		}
 
-			// If the string is just * (or possibly table.*), get all the fields for the table
+		// If the string is just * (or possibly table.*), get all the fields for the table
 		if ($hasWildcard) {
 				// It's only *, set table as main table
 			if ($fieldString === '*') {
@@ -343,7 +343,7 @@ class tx_dataquery_sqlparser {
 				);
 			}
 
-			// Else, the field is some string, analyse it
+		// Else, the field is some string, analyse it
 		} else {
 
 				// If there's an alias, extract it and continue parsing
@@ -370,25 +370,37 @@ class tx_dataquery_sqlparser {
 					$fieldAlias = 'function_' . $this->numFunctions;
 				}
 
-				// There's no function call
+			// There's no function call
 			} else {
 
-					// If there's a dot, get table name
+				// If there's a dot, get table name
 				if (stristr($fieldString, '.')) {
 					$fieldParts = t3lib_div::trimExplode('.', $fieldString, 1);
 					$table = (isset($this->queryObject->aliases[$fieldParts[0]]) ? $this->queryObject->aliases[$fieldParts[0]] : $fieldParts[0]);
 					$alias = $fieldParts[0];
 					$field = $fieldParts[1];
 
-					// No dot, the table is the main one
+				// No dot, the table is the main one
 				} else {
 					$alias = $this->queryObject->mainTable;
 					$table = (isset($this->queryObject->aliases[$alias]) ? $this->queryObject->aliases[$alias] : $alias);
 					$field = $fieldString;
 				}
 			}
-				// Set the appropriate flag if the field is uid or pid
-				// Initialize first, if not yet done
+
+			// For fulltext search, create placeholder which is replaced later with the full MATCH() statement
+			// (if necessary)
+			if (strpos($field, 'fulltext:') !== FALSE || strpos($field, 'fulltext_natural:') !== FALSE) {
+				$fulltextSearchParts = explode(':', $field);
+				$field = 'fulltext.' . $fulltextSearchParts[1];
+				// Create placeholder entry (to be filled later)
+				// If no fulltext value is entered or the table has no fulltext index, the dummy value "1" will be used,
+				// which is neutral to the query.
+				$this->queryObject->fulltextSearchPlaceholders[$table . '.' . $field] = '1';
+			}
+
+			// Set the appropriate flag if the field is uid or pid
+			// Initialize first, if not yet done
 			if (!isset($this->queryObject->hasBaseFields[$alias])) {
 				$this->queryObject->hasBaseFields[$alias] = array('uid' => FALSE, 'pid' => FALSE);
 			}

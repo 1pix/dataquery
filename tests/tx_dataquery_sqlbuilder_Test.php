@@ -636,7 +636,7 @@ abstract class tx_dataquery_sqlbuilder_Test extends tx_phpunit_testcase {
 		$generalCondition = $this->finalizeCondition($this->fullConditionForTable);
 		$additionalSelectFields = $this->prepareAdditionalFields('tt_content');
 		$expectedResult = 'SELECT tt_content.uid, tt_content.header, FROM_UNIXTIME(tstamp, \'%Y\') AS year, tt_content.pid, tt_content.sys_language_uid' . $additionalSelectFields . ' FROM tt_content AS tt_content WHERE ' . $generalCondition;
-			// Add the filter's condition if not empty
+		// Add the filter's condition if not empty
 		if (!empty($condition)) {
 			if ($isSqlCondition) {
 				$expectedResult .= 'AND (' . $condition . ') ';
@@ -653,6 +653,230 @@ abstract class tx_dataquery_sqlbuilder_Test extends tx_phpunit_testcase {
 		$actualResult = $this->sqlParser->buildQuery();
 
 		$this->assertEquals($expectedResult, $actualResult);
+	}
+
+	/**
+	 * Provides filters for testing query with filters.
+	 *
+	 * Some filters are arbitrarily negated, to test the building of negated conditions
+	 * Also provides the expected interpretation of the filter.
+	 *
+	 * @return array
+	 */
+	public function fulltextFilterProvider() {
+		$filters = array(
+			// Boolean mode, one word valid, one word ignore
+			'fulltext, one valid word, one invalid word' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									// "bar" should be ignored, as it is below minimum word length
+									'value' => 'foox bar',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox"\' IN BOOLEAN MODE))'
+			),
+			// Boolean mode, one word included, one word excluded
+			'fulltext, one word included, one word excluded' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									'value' => 'foox -barz',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox" -"barz"\' IN BOOLEAN MODE))'
+			),
+			// Boolean mode with quoted string
+			'fulltext, quoted string' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									'value' => '"go for foox"',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"go for foox"\' IN BOOLEAN MODE))'
+			),
+			// Boolean mode, negated condition
+			'fulltext, negated condition' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									// "bar" should be ignored, as it is below minimum word length
+									'value' => 'foox',
+									'negate' => TRUE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '(NOT MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox"\' IN BOOLEAN MODE))'
+			),
+			// Natural mode
+			'fulltext natural' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext_natural',
+									'value' => 'foo bar',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foo bar\'))'
+			),
+			// Empty search words
+			'fulltext, empty search' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									'value' => '',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '1'
+			),
+			// Empty search words in natural mode
+			'fulltext natural, empty search' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext_natural',
+									'value' => '',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'SEARCH',
+				'fulltextCondition' => '1'
+			),
+			// Invalid index
+			'fulltext, invalid index' => array(
+				'filter' => array(
+					'filters' => array(
+						0 => array(
+							'table' => 'tt_content',
+							'field' => 'score',
+							'conditions' => array(
+								0 => array(
+									'operator' => 'fulltext',
+									// "bar" should be ignored, as it is below minimum word length
+									'value' => 'foox bar',
+									'negate' => FALSE
+								)
+							)
+						)
+					)
+				),
+				'index' => 'WEIRD',
+				'fulltextCondition' => '1'
+			),
+		);
+		return $filters;
+	}
+
+	/**
+	 * Parses and rebuilds a SELECT query with a filter.
+	 *
+	 * @param array $filter Filter configuration
+	 * @param string $index Name of the fulltext index
+	 * @param string $fulltextCondition Interpreted condition
+	 * @test
+	 * @dataProvider fulltextFilterProvider
+	 */
+	public function selectQueryWithFulltextFilter($filter, $index, $fulltextCondition) {
+		/** @var Tx_Dataquery_Parser_Fulltext $fulltextParser */
+		$fulltextParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Dataquery_Parser_Fulltext');
+		/** @var Tx_Dataquery_Utility_DatabaseAnalyser $databaseAnalyser */
+		$databaseAnalyser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Dataquery_Utility_DatabaseAnalyser');
+		// Set "fake" fulltext indices to ensure proper running of unit test
+		$databaseAnalyser->setIndices(
+			'SEARCH',
+			'tt_content',
+			'tt_content.header,tt_content.bodytext'
+		);
+		$fulltextParser->setAnalyser($databaseAnalyser);
+		// Set "fake" configuration extension to ensure proper running of unit test
+		$fulltextParser->setConfiguration(
+			array(
+				'fullTextMinimumWordLength' => 4
+			)
+		);
+		tx_dataquery_SqlUtility::setFulltextParserInstance($fulltextParser);
+		// Replace markers in the condition
+		$generalCondition = $this->finalizeCondition($this->fullConditionForTable);
+		$additionalSelectFields = $this->prepareAdditionalFields('tt_content');
+		$expectedResult = 'SELECT tt_content.uid, tt_content.header, ' . $fulltextCondition . ' AS score, tt_content.pid, tt_content.sys_language_uid' . $additionalSelectFields . ' FROM tt_content AS tt_content WHERE ';
+		$expectedResult .= $generalCondition;
+		if ($fulltextCondition !== '1') {
+			$expectedResult .= 'AND ((' . $fulltextCondition . ')) ';
+		}
+
+		$query = 'SELECT uid,header,fulltext:' . $index . ' AS score FROM tt_content';
+		$this->sqlParser->parseQuery($query);
+		$this->sqlParser->setProviderData($this->settings);
+		$this->sqlParser->addTypo3Mechanisms();
+		$this->sqlParser->addFilter($filter);
+		$actualResult = $this->sqlParser->buildQuery();
+
+		$this->assertEquals($expectedResult, $actualResult, '***Expected***' . $expectedResult . '***Actual***' . $actualResult);
 	}
 
 	/**

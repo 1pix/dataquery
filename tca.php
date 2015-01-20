@@ -58,6 +58,14 @@ $GLOBALS['TCA']['tx_dataquery_queries'] = array(
 				)
 			)
 		),
+		'fulltext_indices' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:dataquery/locallang_db.xlf:tx_dataquery_queries.fulltext_indices',
+			'config' => array(
+				'type' => 'user',
+				'userFunc' => 'Tx_Dataquery_Userfunc_FormEngine->renderFulltextIndices',
+			)
+		),
 		'cache_duration' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.cache_duration',
@@ -137,7 +145,7 @@ $GLOBALS['TCA']['tx_dataquery_queries'] = array(
 		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'hidden;;;;1-1-1, title;;1;;2-2-2, sql_query;;;;3-3-3,
+		'0' => array('showitem' => 'hidden;;;;1-1-1, title;;1;;2-2-2, sql_query;;;;3-3-3, fulltext_indices,
 									--div--;LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.tab.advanced, cache_duration;;;;1-1-1, ignore_enable_fields;;2;;2-2-2 , ignore_language_handling;;3;;3-3-3, get_versions_directly')
 	),
 	'palettes' => array(

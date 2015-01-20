@@ -713,13 +713,34 @@ class tx_dataquery_parser {
 						$tableForApplication = $this->queryObject->mainTable;
 					}
 					foreach ($filterData['conditions'] as $conditionData) {
-							// If the value is special value "\all", all values must be taken,
-							// so the condition is simply ignored
+						// If the value is special value "\all", all values must be taken,
+						// so the condition is simply ignored
 						if ($conditionData['value'] != '\all') {
-							if (!empty($condition)) {
-								$condition .= ' AND ';
+							try {
+								$parsedCondition = tx_dataquery_SqlUtility::conditionToSql($fullField, $table, $conditionData);
+								if (!empty($condition)) {
+									$condition .= ' AND ';
+								}
+								$condition .= '(' . $parsedCondition . ')';
+								// If the operator was a full text search, store resulting condition which will be used
+								// later to replace the placeholder in the SELECT part of the statement
+								if ($conditionData['operator'] == 'fulltext' || $conditionData['operator'] == 'fulltext_natural') {
+									$fullFieldParts = explode('.', $fullField);
+									$placeholderKey = $table . '.fulltext.' . $fullFieldParts[2];
+									if (isset($this->queryObject->fulltextSearchPlaceholders[$placeholderKey])) {
+										$this->queryObject->fulltextSearchPlaceholders[$placeholderKey] = $condition;
+									}
+								}
 							}
-							$condition .= '(' . tx_dataquery_SqlUtility::conditionToSql($fullField, $table, $conditionData) . ')';
+							catch (tx_tesseract_exception $e) {
+								$this->parentObject->getController()->addMessage(
+									self::$extKey,
+									$e->getMessage(),
+									'Condition ignored',
+									t3lib_FlashMessage::WARNING,
+									$filterData
+								);
+							}
 						}
 					}
 						// Add the condition only if it wasn't empty
@@ -850,19 +871,25 @@ class tx_dataquery_parser {
 	}
 
 	/**
-	 * This method builds up the query with all the data stored in the structure
+	 * Builds up the query with all the data stored in the structure.
 	 *
-	 * @return	string		the assembled SQL query
+	 * @return string The assembled SQL query
 	 */
 	public function buildQuery() {
-			// First check what to do with ORDER BY fields
+		// First check what to do with ORDER BY fields
 		$this->preprocessOrderByFields();
-			// Start assembling the query
+		// Start assembling the query
 		$query  = 'SELECT ';
 		if ($this->queryObject->structure['DISTINCT']) {
 			$query .= 'DISTINCT ';
 		}
 		$query .= implode(', ', $this->queryObject->structure['SELECT']) . ' ';
+
+		// Process fulltext replacements, if any
+		foreach ($this->queryObject->fulltextSearchPlaceholders as $placeholder => $replacement) {
+			$query = str_replace($placeholder, $replacement, $query);
+		}
+
 		$query .= 'FROM ' . $this->queryObject->structure['FROM']['table'];
 		if (!empty($this->queryObject->structure['FROM']['alias'])) {
 			$query .= ' AS ' . $this->queryObject->structure['FROM']['alias'];
@@ -903,6 +930,7 @@ class tx_dataquery_parser {
 				$query .= ' OFFSET ' . $this->queryObject->structure['OFFSET'];
 			}
 		}
+
 //t3lib_utility_Debug::debug($query);
 		return $query;
 	}

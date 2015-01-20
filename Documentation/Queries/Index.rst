@@ -37,4 +37,5 @@ to writing queries are described in this chapter.
    Comments/Index
    FieldUid/Index
    AdditionalSql/Index
+   Fulltext/Index
 
