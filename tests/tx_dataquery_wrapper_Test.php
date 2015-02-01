@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Francois Suter <typo3@cobweb.ch>
+*  (c) 2010-2015 Francois Suter <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,8 +28,6 @@
  * @author		Francois Suter <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_dataquery
- *
- * $Id$
  */
 class tx_dataquery_wrapper_Test extends tx_phpunit_testcase {
 	/**
@@ -102,4 +100,3 @@ class tx_dataquery_wrapper_Test extends tx_phpunit_testcase {
 		$this->assertEquals($result, $records);
 	}
 }
-?>

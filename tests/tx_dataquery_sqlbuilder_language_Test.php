@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Francois Suter <typo3@cobweb.ch>
+*  (c) 2010-2015 Francois Suter <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,34 +28,23 @@
  * @author		Francois Suter <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_dataquery
- *
- * $Id$
  */
 class tx_dataquery_sqlbuilder_Language_Test extends tx_dataquery_sqlbuilder_Test {
 
 	/**
-	 * Set up a different language
+	 * @var	string	Language-related SQL condition to apply to tt_content table
+	 */
+	protected $baseLanguageConditionForTable = "(###TABLE###.sys_language_uid IN (0,-1) OR (###TABLE###.sys_language_uid = '2' AND ###TABLE###.l18n_parent = '0'))";
+
+	/**
+	 * Sets up a different language
+	 *
+	 * @return void
 	 */
 	public function setUp() {
 		parent::setUp();
 
-			// Set a different language than default
+		// Set a different language than default
 		$GLOBALS['TSFE']->sys_language_content = 2;
-
-			// Adapt language condition accordingly
-		self::$baseLanguageConditionForTable = "(###TABLE###.sys_language_uid IN (0,-1) OR (###TABLE###.sys_language_uid = '2' AND ###TABLE###.l18n_parent = '0'))";
-			// NOTE: markers are used instead of the corresponding conditions, because the setUp() method
-			// is not invoked inside the data providers. Thus when using a data provider, it's not possible
-			// to refer to the conditions defined via setUp()
-		self::$fullConditionForTable = '###BASE_CONDITION### AND ###LANGUAGE_CONDITION### AND ###WORKSPACE_CONDITION###';
-	}
-
-	/**
-	 * Reset environment
-	 */
-	public function tearDown() {
-		parent::tearDown();
-		$GLOBALS['TSFE']->sys_language_content = 0;
 	}
 }
-?>

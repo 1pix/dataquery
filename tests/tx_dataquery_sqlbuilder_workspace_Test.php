@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Francois Suter <typo3@cobweb.ch>
+*  (c) 2010-2015 Francois Suter <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,53 +28,137 @@
  * @author		Francois Suter <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_dataquery
- *
- * $Id$
  */
 class tx_dataquery_sqlbuilder_Workspace_Test extends tx_dataquery_sqlbuilder_Test {
-	/**
-	 * @var	integer	ID of the current workspace
-	 */
-	protected $saveWorkspaceValue;
 
 	/**
-	 * Set up the workspace preview environment
+	 * @var	string	Base SQL condition to apply to tt_content table
+	 */
+	protected $baseConditionForTable = '###MINIMAL_CONDITION###';
+
+	/**
+	 * @var string Absolute minimal condition applied to all TYPO3 requests, even in workspaces
+	 */
+	protected $minimalConditionForTable = '###TABLE###.deleted=0';
+
+	/**
+	 * @var string Condition on user groups found inside the base condition
+	 */
+	protected $groupsConditionForTable = '';
+
+	/**
+	 * @var	string	Base workspace-related SQL condition to apply to tt_content table
+	 */
+	protected $baseWorkspaceConditionForTable = '(###TABLE###.t3ver_wsid=0 OR ###TABLE###.t3ver_wsid=42) AND ###TABLE###.pid<>-1';
+
+	/**
+	 * @var	string	Additional workspace-related SQL condition to apply to tt_content table
+	 */
+	protected $additionalWorkspaceConditionForTable = ' AND ((###TABLE###.t3ver_state <= 0 AND ###TABLE###.t3ver_oid = 0) OR (###TABLE###.t3ver_state = 0 AND ###TABLE###.t3ver_wsid = 42) OR (###TABLE###.t3ver_state = 1 AND ###TABLE###.t3ver_wsid = 42) OR (###TABLE###.t3ver_state = 3 AND ###TABLE###.t3ver_wsid = 42)) ';
+
+	/**
+	 * @var	string	Full SQL condition (for tt_content) to apply to all queries. Will be based on the above components.
+	 */
+	protected $fullConditionForTable = '(###BASE_CONDITION### AND ###WORKSPACE_CONDITION###) AND ###LANGUAGE_CONDITION######ADDITIONAL_WORKSPACE_CONDITION###';
+
+	/**
+	 * @var	string	Full SQL condition except for languages
+	 */
+	protected $noLanguagesConditionForTable = '(###BASE_CONDITION### AND ###WORKSPACE_CONDITION###)###ADDITIONAL_WORKSPACE_CONDITION###';
+
+	/**
+	 * @var string Full condition is different for pages table, because language handling is delegated to separate table
+	 */
+	protected $conditionForPagesTables = '(###MINIMAL_CONDITION### AND ###TABLE###.pid<>-1)###ADDITIONAL_WORKSPACE_CONDITION###';
+
+	/**
+	 * Sets up the workspace preview environment
+	 * @return void
 	 */
 	public function setUp() {
 		parent::setUp();
 
-			// Add version state to the SELECT fields
+		// Add version state to the SELECT fields
 		$this->additionalFields[] = 't3ver_state';
 
-			// Activate versioning preview
+		// Activate versioning preview
 		$GLOBALS['TSFE']->sys_page->versioningPreview = TRUE;
-			// Save current workspace (should the LIVE one really) and switch to Draft
-		$this->saveWorkspaceValue = $GLOBALS['BE_USER']->workspace;
+		// Save current workspace (should be the LIVE one really) and switch to dummy workspace
 		$GLOBALS['BE_USER']->workspace = 42;
-
-			// The base condition is different in the case of workspaces, because
-			// versioning preview deactivates most of the enable fields check
-		self::$minimalConditionForTable = '###TABLE###.deleted=0';
-		self::$baseConditionForTable = '(###MINIMAL_CONDITION###)';
-		self::$groupsConditionForTable = '';
-			// Reset language condition which might have been altered by language unit test
-		self::$baseLanguageConditionForTable = '(###TABLE###.sys_language_uid IN (0,-1))';
-			// Add workspace condition, assuming some arbitrary workspace (= 42)
-		self::$baseWorkspaceConditionForTable = '((###TABLE###.t3ver_state <= 0 AND ###TABLE###.t3ver_oid = 0) OR (###TABLE###.t3ver_state = 0 AND ###TABLE###.t3ver_wsid = 42) OR (###TABLE###.t3ver_state = 1 AND ###TABLE###.t3ver_wsid = 42) OR (###TABLE###.t3ver_state = 3 AND ###TABLE###.t3ver_wsid = 42)) ';
-//		self::$fullConditionForTable = self::$baseConditionForTable . self::$baseLanguageConditionForTable . self::$baseWorkspaceConditionForTable;
-			// NOTE: markers are used instead of the corresponding conditions, because the setUp() method
-			// is not invoked inside the data providers. Thus when using a data provider, it's not possible
-			// to refer to the conditions defined via setUp()
-		self::$fullConditionForTable = '###BASE_CONDITION### AND ###LANGUAGE_CONDITION### AND ###WORKSPACE_CONDITION###';
+		$GLOBALS['TSFE']->sys_page->versioningWorkspaceId = 42;
 	}
 
 	/**
-	 * Reset environment
+	 * Provides various setups for all ignore flags
+	 * Also provides the corresponding expected WHERE clauses.
+	 *
+	 * Differs from parent as different conditions apply to workspaces.
+	 *
+	 * @return array
 	 */
-	public function tearDown() {
-		parent::tearDown();
-		$GLOBALS['TSFE']->sys_page->versioningPreview = FALSE;
-		$GLOBALS['BE_USER']->workspace = $this->saveWorkspaceValue;
+	public function ignoreSetupProvider() {
+		$setup = array(
+			'ignore nothing' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '0',
+					'ignore_time_for_tables' => '',
+					'ignore_disabled_for_tables' => 'pages',
+					'ignore_fegroup_for_tables' => 'tt_content' // Tests that this is *not* ignore, because global ignore flag is 0
+				),
+				'condition' => $this->fullConditionForTable
+			),
+			// Ignore all enable fields (detailed settings should be irrelevant)
+			'ignore all' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '1',
+					'ignore_time_for_tables' => '',
+					'ignore_disabled_for_tables' => 'pages',
+					'ignore_fegroup_for_tables' => 'tt_content'
+				),
+				'condition' => '###LANGUAGE_CONDITION######ADDITIONAL_WORKSPACE_CONDITION###'
+			),
+			// Ignore select enable fields, take 1: ignore all fields for all tables
+			'ignore selected - all for all tables' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '2',
+					'ignore_time_for_tables' => '*',
+					'ignore_disabled_for_tables' => '*',
+					'ignore_fegroup_for_tables' => '*'
+				),
+				'condition' => '(###MINIMAL_CONDITION### AND ###WORKSPACE_CONDITION###) AND ###LANGUAGE_CONDITION######ADDITIONAL_WORKSPACE_CONDITION###'
+			),
+			// Ignore select enable fields, take 2: ignore all fields for all tables
+			// NOTE: should be the same as previous one since the only table in the query is tt_content
+			'ignore selected - all for tt_content' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '2',
+					'ignore_time_for_tables' => 'tt_content',
+					'ignore_disabled_for_tables' => 'tt_content',
+					'ignore_fegroup_for_tables' => 'tt_content'
+				),
+				'condition' => '(###MINIMAL_CONDITION### AND ###WORKSPACE_CONDITION###) AND ###LANGUAGE_CONDITION######ADDITIONAL_WORKSPACE_CONDITION###'
+			),
+			// Ignore select enable fields, take 3: ignore time fields for all tables and hidden field for tt_content
+			'ignore selected - time and disabled for tt_content' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '2',
+					'ignore_time_for_tables' => '*',
+					'ignore_disabled_for_tables' => ', tt_content', // Weird but valid value (= tt_content)
+					'ignore_fegroup_for_tables' => 'pages' // Irrelevant, table "pages" is not in query
+				),
+				'condition' => '(###MINIMAL_CONDITION######GROUP_CONDITION### AND ###WORKSPACE_CONDITION###) AND ###LANGUAGE_CONDITION######ADDITIONAL_WORKSPACE_CONDITION###'
+			),
+			// Ignore select enable fields, take 4: no tables defined at all, so nothing is ignore after all
+			'ignore selected - ignore nothing after all' => array(
+				'ignore_setup' => array(
+					'ignore_enable_fields' => '2',
+					'ignore_time_for_tables' => '',
+					'ignore_disabled_for_tables' => '',
+					'ignore_fegroup_for_tables' => ''
+				),
+				'condition' => $this->fullConditionForTable
+			),
+		);
+		return $setup;
 	}
 }
-?>

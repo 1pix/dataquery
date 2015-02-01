@@ -83,8 +83,9 @@ class tx_dataquery_parser_Test extends tx_phpunit_testcase {
 	 * @dataProvider tablesAndFieldsProvider
 	 */
 	public function detectTextField($table, $field, $result) {
+		$dataqueryWrapper = $this->getMock('tx_dataquery_wrapper');
 		/** @var tx_dataquery_parser $parser */
-		$parser = t3lib_div::makeInstance('tx_dataquery_parser');
+		$parser = t3lib_div::makeInstance('tx_dataquery_parser', $dataqueryWrapper);
 		$this->assertEquals(
 			$parser->isATextField(
 				$table,

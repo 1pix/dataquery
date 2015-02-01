@@ -30,8 +30,6 @@
  * @author		Francois Suter <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_dataquery
- *
- * $Id$
  */
 class tx_dataquery_sqlbuilder_Default_Test extends tx_dataquery_sqlbuilder_Test {
 }
