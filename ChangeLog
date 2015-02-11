@@ -1,3 +1,11 @@
+2015-02-11 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released to TER as version 1.11.0, resolves #65008
+
+2015-02-09 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Added fulltext search capability, resolves #41882
+
 2015-02-01 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Refactored existing unit tests, resolves #64488
