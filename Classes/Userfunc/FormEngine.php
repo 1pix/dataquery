@@ -127,6 +127,7 @@ class Tx_Dataquery_Userfunc_FormEngine {
 	 * @return string
 	 */
 	protected function getMessageNoIndexFound() {
+		$outputs = array();
 
 		$string = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_index');
 		$outputs[] = sprintf($string, $this->table);
@@ -137,7 +138,7 @@ class Tx_Dataquery_Userfunc_FormEngine {
 			$string = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.tables_list');
 			$outputs[] = sprintf($string, $listOfTables);
 		} else {
-			$outputs = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_table_found');
+			$outputs[] = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_table_found');
 		}
 		return implode('<br>', $outputs);
 	}

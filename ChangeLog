@@ -1,3 +1,7 @@
+2015-02-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Fixed wrong output in custom fulltext field, resolves #65409
+
 2015-02-11 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Released to TER as version 1.11.0, resolves #65008
