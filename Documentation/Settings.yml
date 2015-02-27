@@ -7,7 +7,7 @@ conf.py:
   copyright: 2007-2015
   project: Data Query
   version: 1.11
-  release: 1.11.0
+  release: 1.11.1
   latex_documents:
   - - Index
     - dataquery.tex
