@@ -40,8 +40,8 @@ Questions?
 ^^^^^^^^^^
 
 If you have any questions about this extension, you may want to refer
-to the Tesseract Project web site (`http://www.typo3-tesseract.com/
-<http://www.typo3-tesseract.com/>`_) for support and tutorials. You
+to the Tesseract Project web site http://www.typo3-tesseract.com/
+for support and tutorials. You
 may also ask questions in the TYPO3 English mailing list
 (typo3.english).
 

@@ -11,7 +11,7 @@
 Expressions in queries
 ^^^^^^^^^^^^^^^^^^^^^^
 
-It is possible to use `expressions <http://typo3.org/extensions/repository/view/expressions>`_
+It is possible to use :ref:`expressions <expressions:start>`
 inside a query. Consider the following:
 
 .. code-block:: sql
@@ -29,5 +29,4 @@ be used in the WHERE clause. Instead Data Filters should be used in
 this case. This is not a limitation per se, just a best practice.
 
 For more information on expressions, please refer to the
-`extension manual <http://docs.typo3.org/typo3cms/extensions/expressions/>`_.
-
+:ref:`extension manual <expressions:start>`.

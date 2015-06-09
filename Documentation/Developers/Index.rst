@@ -30,19 +30,19 @@ postProcessDataStructureBeforeCache
   cache)
 
 Both hooks receive as arguments the full Data Structure as well as a
-back-reference to the calling :code:`tx\_dataquery\_wrapper` object.
+back-reference to the calling :code:`\Tesseract\Dataquery\Component\DataProvider` object.
 They are expected to return a complete Data Structure even if they did
 not perform any change.
 
 Skeleton code for both hooks can be found in
-:code:`samples/class.tx\_dataquery\_sample\_hook.php`.
+:file:`Classes/Sample/DataQueryHook.php`.
 
 Another hook is available for manipulating the tables and fields
 information:
 
 postProcessFieldInformation
   This hook is inside
-  :code:`tx\_dataquery\_wrapper::getTablesAndFields()`, a method which
+  :code:`\Tesseract\Dataquery\Component\DataProvider::getTablesAndFields()`, a method which
   is called when "dataquery" provides Data Consumers with a list of
   available tables and fields while working within the TYPO3 backend
   (this is how, for example, "templatedisplay" knows which fields to
@@ -57,11 +57,11 @@ manipulating the parameters used to calculate the hash:
 
 processCacheHashParameters
   This hook is called inside
-  :code:`tx\_dataquery\_wrapper::calculateCacheHash()`. It receives as
+  :code:`\Tesseract\Dataquery\Component\DataProvider::calculateCacheHash()`. It receives as
   arguments the current cache parameters (an associative array) and a
   back-reference to the calling object (an instance of
-  :code:`tx\_dataquery\_wrapper`). It is expected to return the full
+  :code:`\Tesseract\Dataquery\Component\DataProvider`). It is expected to return the full
   array of cache parameters, whether it modified them or not. Classes
   using this hook must implement interface
-  :code:`tx\_dataquery\_cacheParametersProcessor`.
+  :code:`\Tesseract\Dataquery\Cache\CacheParametersProcessorInterface`.
 

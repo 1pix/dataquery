@@ -18,11 +18,11 @@ So the following query:
 
 .. code-block:: sql
 
-   SELECT * FROM tt_news, tx_dam WHERE …
+   SELECT * FROM tt_news, tx_dam WHERE ...
 
 would become:
 
 .. code-block:: sql
 
-   SELECT * FROM tt_news INNER JOIN tx_dam WHERE …
+   SELECT * FROM tt_news INNER JOIN tx_dam WHERE ...
 

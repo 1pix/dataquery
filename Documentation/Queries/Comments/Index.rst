@@ -12,7 +12,7 @@ Comments
 ^^^^^^^^
 
 It is possible to comment lines in the query by starting them with a
-"#" or "//" marker. Example:
+:code:`#` or :code:`//` marker. Example:
 
 .. code-block:: sql
 

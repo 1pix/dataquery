@@ -20,7 +20,7 @@ Data Query and change it dynamically via the filters.
 
 Technically the filter structure created by the Data Filter is passed
 to the Data Query by the controller using the
-:code:`tx\_tesseract\_dataprovider::setDataFilter()` method from the
+:code:`\Tesseract\Tesseract\Service\ConsumerBase::setDataFilter::setDataFilter()` method from the
 base provider interface. The filter structure is then translated into
 SQL by Data Query and added to the base query from the "SQL query"
 field.
@@ -38,26 +38,26 @@ query:
 
 .. code-block:: sql
 
-   SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content
+	SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content
 
 with the following Data Filter:
 
-.. code-block:: sql
+.. code-block:: text
 
-   year = date:Y
+	year = date:Y
 
 (which would select all content element edited during the current
 year). This will be (correctly) interpreted as:
 
 .. code-block:: sql
 
-   SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content WHERE (FROM_UNIXTIME(tstamp, '%Y') = 2010)
+	SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content WHERE (FROM_UNIXTIME(tstamp, '%Y') = 2010)
 
 (assuming the current year is 2010), instead of:
 
 .. code-block:: sql
 
-   SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content WHERE (year = 2010)
+	SELECT FROM_UNIXTIME(tstamp, '%Y') AS year FROM tt_content WHERE (year = 2010)
 
 which would cause a SQL syntax error.
 
@@ -71,14 +71,14 @@ Imagine setting up a group of checkboxes like:
 
 .. code-block:: html
 
-   <input type="checkbox" name="tx_myext[foo][]" value="bob" />
-   <input type="checkbox" name="tx_myext[foo][]" value="alice" />
+	<input type="checkbox" name="tx_myext[foo][]" value="bob" />
+	<input type="checkbox" name="tx_myext[foo][]" value="alice" />
 
 Next imagine a filter like:
 
 .. code-block:: text
 
-   fe_users.name like gp:tx_myext|foo
+	fe_users.name like gp:tx_myext|foo
 
 The value returned will be an array. This is handled by Data Query by
 creating a LIKE condition for each value and concatenating all these
@@ -88,7 +88,7 @@ checked):
 
 .. code-block:: sql
 
-   (fe_users.name LIKE '%bob%' OR fe_users.name LIKE '%alice%')
+	(fe_users.name LIKE '%bob%' OR fe_users.name LIKE '%alice%')
 
 It's not possible to change the logical operator to "AND" (this didn't
 seem useful after thinking quite a bit about it; the whole reasoning

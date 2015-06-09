@@ -12,6 +12,5 @@ Data Query output
 ^^^^^^^^^^^^^^^^^
 
 "dataquery" returns a standardized data structure of type "recordset".
-Refer to the `"tesseract" manual <http://docs.typo3.org/typo3cms/extensions/tesseract/>`_
+Refer to the :ref:`"tesseract" manual <tesseract:start>`
 for more details on such data structure.
-

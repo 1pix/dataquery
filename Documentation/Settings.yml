@@ -18,6 +18,13 @@ conf.py:
     papersize: a4paper
     pointsize: 10pt
     preamble: \usepackage{typo3}
+  intersphinx_mapping:
+    expressions:
+    - http://docs.typo3.org/typo3cms/extensions/expressions/
+    - null
+    tesseract:
+    - http://docs.typo3.org/typo3cms/extensions/tesseract/
+    - null
   extensions:
   - sphinx.ext.intersphinx
   - t3sphinx.ext.t3extras

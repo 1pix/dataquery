@@ -1,0 +1,10 @@
+.x-btn button {
+	font-weight: normal !important;
+}
+.message-header {
+	margin-bottom: 10px;
+}
+#tx_dataquery_wizardContainer {
+	width: 97%;
+	white-space: normal;
+}

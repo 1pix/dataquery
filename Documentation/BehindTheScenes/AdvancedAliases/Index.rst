@@ -18,10 +18,10 @@ query that appears in the introductory screenshot:
 
 .. code-block:: sql
 
-   SELECT uid, title, COUNT(children.uid) AS pages.children FROM pages
-   LEFT JOIN pages AS children ON children.pid = pages.uid
-   WHERE children.uid IS NOT NULL AND pages.pid = 1
-   ORDER BY pages.title ASC GROUP BY pages.uid
+	SELECT uid, title, COUNT(children.uid) AS pages.children FROM pages
+	LEFT JOIN pages AS children ON children.pid = pages.uid
+	WHERE children.uid IS NOT NULL AND pages.pid = 1
+	ORDER BY pages.title ASC GROUP BY pages.uid
 
 If you try to execute it as is you will get several SQL errors. It is
 indeed not correct, but will be by the time Data Query has rewritten
