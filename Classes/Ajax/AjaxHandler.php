@@ -49,8 +49,11 @@ class AjaxHandler {
 			// Get the query to parse from the GET/POST parameters
 			$query = GeneralUtility::_GP('query');
 			// Create an instance of the parser
+			// NOTE: NULL is passed for the parent object as there's no controller in this context,
+			// but that's a bit risky. Maybe extension "tesseract" could provide a dummy controller
+			// (or some logic should be split: the query parser should not also be a query builder).
 			/** @var $parser \Tesseract\Dataquery\Parser\QueryParser */
-			$parser = GeneralUtility::makeInstance('Tesseract\\Dataquery\\Parser\\QueryParser');
+			$parser = GeneralUtility::makeInstance('Tesseract\\Dataquery\\Parser\\QueryParser', NULL);
 			// Clean up and prepare the query string
 			$query = $parser->prepareQueryString($query);
 			// Parse the query
@@ -87,7 +90,12 @@ class AjaxHandler {
 			$parsingSeverity = FlashMessage::ERROR;
 			$parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.failure');
 			$exceptionCode = $e->getCode();
+			// Display "improved" exception message (if available)
 			$parsingMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.exception-' . $exceptionCode);
+			// If some unexpected exception occurred, display original message
+			if (empty($parsingMessage)) {
+				$parsingMessage = $e->getMessage();
+			}
 		}
 		// Render parsing result as flash message
 		/** @var $flashMessage FlashMessage */

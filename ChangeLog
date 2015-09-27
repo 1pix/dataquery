@@ -1,3 +1,7 @@
+2015-09-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Fixed crashing query check wizard, resolves #70136
+
 2015-06-09 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Moved to namespaces, verified compatibility with TYPO3 CMS 7, resolves #67370
