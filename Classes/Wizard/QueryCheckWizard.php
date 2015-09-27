@@ -14,7 +14,7 @@ namespace Tesseract\Dataquery\Wizard;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Form\FormEngine;
+use TYPO3\CMS\Backend\Form\Element\TextElement;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
@@ -30,10 +30,10 @@ class QueryCheckWizard {
 	 * Renders the wizard itself.
 	 *
 	 * @param array $fieldParameters Parameters of the field
-	 * @param FormEngine $formObject Calling object
+	 * @param TextElement $textField Calling object
 	 * @return string HTML for the wizard
 	 */
-	public function render($fieldParameters, FormEngine $formObject) {
+	public function render($fieldParameters, TextElement $textField) {
 		// Get the id attribute of the field tag
 		preg_match('/id="(.+?)"/', $fieldParameters['item'], $matches);
 

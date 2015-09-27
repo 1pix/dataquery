@@ -14,6 +14,7 @@ namespace Tesseract\Dataquery\UserFunction;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Form\Element\UserElement;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -61,10 +62,10 @@ class FormEngine {
 	 * This method format a message regarding FULLTEXT indexes in the database towards a BE user.
 	 *
 	 * @param array $parameters Properties of the field being modified
-	 * @param \TYPO3\CMS\Backend\Form\FormEngine $parentObject Back-reference to the calling object
+	 * @param UserElement $userField Back-reference to the calling object
 	 * @return string
 	 */
-	public function renderFulltextIndices($parameters, \TYPO3\CMS\Backend\Form\FormEngine $parentObject) {
+	public function renderFulltextIndices($parameters, UserElement $userField) {
 		$output = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_index_or_missing_table');
 
 		if (empty($parameters['row']['sql_query'])) {
