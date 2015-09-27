@@ -2,6 +2,7 @@
 
 	* Fixed crashing query check wizard, resolves #70136
 	* Ensured compatibility with TYPO3 CMS 7.5, resolves #70137
+	* Added reference to description field, resolves #70139
 
 2015-06-09 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

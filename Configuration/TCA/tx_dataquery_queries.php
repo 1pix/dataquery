@@ -3,10 +3,11 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 return array(
 	'ctrl' => array (
-		'title'     => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries',
-		'label'     => 'title',
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
+		'title' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries',
+		'label' => 'title',
+		'descriptionColumn' => 'description',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'versioningWS' => TRUE,
 		'origUid' => 't3_origuid',
@@ -26,7 +27,7 @@ return array(
 	),
 	'columns' => array(
 		't3ver_label' => array(
-			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
 			'config' => array(
 				'type' => 'input',
 				'size' => '30',
@@ -162,8 +163,10 @@ return array(
 		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'hidden;;;;1-1-1, title;;1;;2-2-2, sql_query;;;;3-3-3, fulltext_indices,
-									--div--;LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.tab.advanced, cache_duration;;;;1-1-1, ignore_enable_fields;;2;;2-2-2 , ignore_language_handling;;3;;3-3-3, get_versions_directly')
+		'0' => array(
+			'showitem' => 'hidden, title;;1, sql_query, fulltext_indices,
+							--div--;LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.tab.advanced, cache_duration, ignore_enable_fields;;2, ignore_language_handling;;3, get_versions_directly'
+		)
 	),
 	'palettes' => array(
 		'1' => array('showitem' => 'description'),
