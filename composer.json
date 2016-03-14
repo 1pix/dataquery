@@ -1,0 +1,15 @@
+{
+	"name": "tesseract/dataquery",
+	"type": "typo3-cms-extension",
+	"description": "Assembles a query on data stored in the TYPO3 local database, automatically enforcing criteria like language, publication date, etc. More info on http://www.typo3-tesseract.com/",
+	"license": ["GPL-2.0+"],
+	"autoload": {
+		"psr-4": {
+			"Tesseract\\Dataquery\\": "Classes/"
+		}
+	},
+	"replace": {
+		"dataquery": "self.version",
+		"typo3-ter/dataquery": "self.version"
+	}
+}
