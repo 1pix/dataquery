@@ -2,6 +2,7 @@
 
 	* Applied PSR-2 formatting and other cleanups, resolves #75678
 	* Moved language files to XLIFF, resolves #75685
+	* Changed default query cache duration to 0, resolves #57138
 
 2015-09-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

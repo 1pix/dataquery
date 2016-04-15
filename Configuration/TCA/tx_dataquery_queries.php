@@ -90,7 +90,7 @@ return array(
 			'config' => array(
 				'type' => 'input',
 				'size' => 20,
-				'default' => 86400,
+				'default' => 0,
 				'eval' => 'int',
 			)
 		),
