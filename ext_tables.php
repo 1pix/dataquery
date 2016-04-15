@@ -20,7 +20,7 @@ $iconRegistry->registerIcon(
 // Add context sensitive help (csh) for this table
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
         'tx_dataquery_queries',
-        'EXT:' . $_EXTKEY . '/locallang_csh_txdataqueryqueries.xml'
+        'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_txdataqueryqueries.xlf'
 );
 
 // Register dataquery as a Data Provider
@@ -30,7 +30,7 @@ $GLOBALS['TCA']['tt_content']['columns']['tx_displaycontroller_provider2']['conf
 // Add a wizard for adding a dataquery
 $addDataqueryWizard = array(
 	'type' => 'script',
-	'title' => 'LLL:EXT:' . $_EXTKEY . '/locallang_db.xml:wizards.add_dataquery',
+	'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_db.xlf:wizards.add_dataquery',
 	'script' => 'wizard_add.php',
 	'module' => array(
 		'name' => 'wizard_add'
@@ -48,5 +48,5 @@ $GLOBALS['TCA']['tt_content']['columns']['tx_displaycontroller_provider2']['conf
 // Add context sensitive help (csh) for the added field
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
         'tx_datafilter_filters',
-        'EXT:' . $_EXTKEY . '/locallang_csh_txdatafilterfilters.xml'
+        'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_txdatafilterfilters.xlf'
 );

@@ -56,9 +56,9 @@ class QueryCheckWizard
                 'var TX_DATAQUERY = {
 				fieldId : "' . $matches[1] . '",
 				labels : {
-					"debugTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/locallang.xml:wizard.check.debugTab') . '",
-					"previewTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/locallang.xml:wizard.check.previewTab') . '",
-					"validateButton" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/locallang.xml:wizard.check.validateButton') . '"
+					"debugTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.debugTab') . '",
+					"previewTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.previewTab') . '",
+					"validateButton" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.validateButton') . '"
 				}
 			};'
         );

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-15T15:19:54Z" product-name="dataquery">
+		<header/>
+		<body>
+			<trans-unit id="tx_dataquery_sql.alttitle" xml:space="preserve">
+				<source>SQL WHERE</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_sql.description" xml:space="preserve">
+				<source>Additional SQL statements that will be added to the WHERE clause.</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_sql.details" xml:space="preserve">
+				<source>
+				This field works in relation with the dataquery extension.
+				Any SQL entered here will be added to the WHERE clause of the SQL query assembled by dataquery. Do not add the keyword &quot;WHERE&quot; yourself.
+				Expressions can be used inside these statements, but don't forget to use the fullQuoteStr function to guard against SQL injection!
+			</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-15T15:20:01Z" product-name="dataquery">
+		<header/>
+		<body>
+			<trans-unit id=".alttitle" xml:space="preserve">
+				<source>Data Queries</source>
+			</trans-unit>
+			<trans-unit id=".description" xml:space="preserve">
+				<source>Data Queries are a SQL-based Data Provider for use with the Tesseract framework</source>
+			</trans-unit>
+			<trans-unit id=".syntax" xml:space="preserve">
+				<source>
+				Data Queries enable you to write SQL queries without worrying about all the TYPO3-specific mechanisms like enable fields or translation handling.
+				There's a restriction on what SQL elements you can use in the queries and how to write such queries. Please refer to the manual for more information.
+			</source>
+			</trans-unit>
+			<trans-unit id="hidden.alttitle" xml:space="preserve">
+				<source>Hide</source>
+			</trans-unit>
+			<trans-unit id="hidden.description" xml:space="preserve">
+				<source>This field is not actively used inside Tesseract.</source>
+			</trans-unit>
+			<trans-unit id="hidden.details" xml:space="preserve">
+				<source>
+				This field is not considered by the existing components of Tesseract. It could be used to give a visual indication of an obsolete query.
+				May be used actively in the future or remove altogether.
+			</source>
+			</trans-unit>
+			<trans-unit id="title.alttitle" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="title.description" xml:space="preserve">
+				<source>Some significant name or label for the query.</source>
+			</trans-unit>
+			<trans-unit id="description.alttitle" xml:space="preserve">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="description.description" xml:space="preserve">
+				<source>Purely descriptive field. Can be used for entering any necessary information about the query.</source>
+			</trans-unit>
+			<trans-unit id="sql_query.alttitle" xml:space="preserve">
+				<source>SQL query</source>
+			</trans-unit>
+			<trans-unit id="sql_query.description" xml:space="preserve">
+				<source>SQL-based query to the local database.</source>
+			</trans-unit>
+			<trans-unit id="sql_query.details" xml:space="preserve">
+				<source>
+				SQL queries entered in this field don't need to cater for TYPO3 specifics like enable fields or such. This is all handled automatically unless disabled (see the &quot;Advanced&quot; tab).
+				Not all SQL syntactic elements can be used. Furthermore the query has to be written in a certain way. Please refer to the manual for a complete overview of these conditions.
+			</source>
+			</trans-unit>
+			<trans-unit id="cache_duration.alttitle" xml:space="preserve">
+				<source>Cache duration</source>
+			</trans-unit>
+			<trans-unit id="cache_duration.description" xml:space="preserve">
+				<source>Number of seconds during which the result of the query must be stored.</source>
+			</trans-unit>
+			<trans-unit id="cache_duration.details" xml:space="preserve">
+				<source>
+				The Data Query tool performs some quite complex operations on the data sets retrieved from the database. It is worth storing the result into a cache table to prevent repeating these operations needlessly.
+				This cache can be quite large and may even crash your database when writing to it. Please take care to set the &quot;Cache limit&quot; parameter in the extension configuration to some appropriate value.
+				Setting the cache duration to 0 will effectively disable caching for that query.
+				Refer to the manual for more details about caching.
+			</source>
+			</trans-unit>
+			<trans-unit id="ignore_enable_fields.alttitle" xml:space="preserve">
+				<source>Ignore enable fields</source>
+			</trans-unit>
+			<trans-unit id="ignore_enable_fields.description" xml:space="preserve">
+				<source>Choose a behavior with regards to the handling of enable fields.</source>
+			</trans-unit>
+			<trans-unit id="ignore_enable_fields.details" xml:space="preserve">
+				<source>
+				Enables fields are those defined as such in the TCA of each table. They are generally the hidden or disabled field, the start and end time and the fe_groups access rights.
+				By default Data Query automatically respects all these fields and adds the corresponding conditions to the SQL query. However it is possible to disable this behavior.
+				Check the &quot;Ignore all fields&quot; radio button to totally disable this behavior for all tables. On the other hand you can check the &quot;Ignore some fields for some tables&quot; button and define exactly which enable fields should be ignored for which table in the three text fields that follow. Enter comma-separated table names to exclude one or more tables. Use &quot;*&quot; to ignore all of them. Leave blank to ignore none.
+			</source>
+			</trans-unit>
+			<trans-unit id="ignore_time_for_tables.description" xml:space="preserve">
+				<source>List tables for which the start and end time condition should not apply.</source>
+			</trans-unit>
+			<trans-unit id="ignore_time_for_tables.syntax" xml:space="preserve">
+				<source>
+				Enter a comma-separated list of table names, e.g.
+
+				pages,tt_content
+
+				Use &quot;*&quot; to skip the condition for all tables. On the contrary, leave blank for the condition to apply to all tables.
+			</source>
+			</trans-unit>
+			<trans-unit id="ignore_disabled_for_tables.description" xml:space="preserve">
+				<source>List tables for which the hidden or disabled condition should not apply.</source>
+			</trans-unit>
+			<trans-unit id="ignore_disabled_for_tables.syntax" xml:space="preserve">
+				<source>
+				Enter a comma-separated list of table names, e.g.
+
+				pages,tt_content
+
+				Use &quot;*&quot; to skip the condition for all tables. On the contrary, leave blank for the condition to apply to all tables.
+			</source>
+			</trans-unit>
+			<trans-unit id="ignore_fegroup_for_tables.description" xml:space="preserve">
+				<source>List tables for which the access rights condition should not apply.</source>
+			</trans-unit>
+			<trans-unit id="ignore_fegroup_for_tables.syntax" xml:space="preserve">
+				<source>
+				Enter a comma-separated list of table names, e.g.
+
+				pages,tt_content
+
+				Use &quot;*&quot; to skip the condition for all tables. On the contrary, leave blank for the condition to apply to all tables.
+			</source>
+			</trans-unit>
+			<trans-unit id="ignore_language_handling.alttitle" xml:space="preserve">
+				<source>Translation handling</source>
+			</trans-unit>
+			<trans-unit id="ignore_language_handling.description" xml:space="preserve">
+				<source>Checking this box disables the automatic use of all fields related to translation handling, as defined in the TCA.</source>
+			</trans-unit>
+			<trans-unit id="ignore_language_handling.details" xml:space="preserve">
+				<source>
+				Checking this box generally makes sense only in a site with a single language.
+				It can also be used in special situations when the language selection is written in the SQL query itself, or when querying tables that may not follow the usual TYPO3 language handling pattern.
+			</source>
+			</trans-unit>
+			<trans-unit id="skip_overlays_for_tables.description" xml:space="preserve">
+				<source>Comma-separated list of tables for which neither the language conditions, nor the translation overlay mechanism should be applied.</source>
+			</trans-unit>
+			<trans-unit id="get_versions_directly.description" xml:space="preserve">
+				<source>List tables for which to get the version overlays straightaway rather than the placeholder records.</source>
+			</trans-unit>
+			<trans-unit id="get_versions_directly.details" xml:space="preserve">
+				<source>
+				By default Data Query will get the placeholders for new or modified records and then overlay these with the appropriate workspace version.
+
+				However if your query contains JOINs between versioned records, the chances are that the relations between those records is found only in the workspace version of the record and not the placeholder. In such a case, the workspace version should be selected directly be entering the relevant table names in that field.
+
+				NOTE: this feature should be considered as still experimental. It has been tested successfully in some situations, but some other scenarios may not be covered.
+			</source>
+			</trans-unit>
+			<trans-unit id="get_versions_directly.seeAlso" xml:space="preserve">
+				<source>TYPO3 Core API | http://typo3.org/documentation/document-library/core-documentation/doc_core_api/current/</source>
+			</trans-unit>
+			<trans-unit id="get_versions_directly.syntax" xml:space="preserve">
+				<source>
+				Enter a comma-separated list of table names, e.g.
+
+				pages,tt_content
+
+				Use &quot;*&quot; to apply this parameter all tables. On the contrary, leave blank for applying it to none.
+			</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

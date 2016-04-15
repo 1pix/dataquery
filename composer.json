@@ -16,12 +16,6 @@
 			"Tesseract\\Dataquery\\": "Classes/"
 		}
 	},
-	"autoload-dev": {
-		"psr-4": {
-			"Tesseract\\Dataquery\\Tests\\": "Tests/",
-			"TYPO3\\CMS\\Core\\Tests\\": "vendor/typo3/cms/typo3/sysext/core/Tests/"
-		}
-	},
 	"version": "2.0.0",
 	"require": {
 		"typo3/cms-core": ">=7.6.0,<8.0",

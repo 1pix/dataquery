@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-15T15:19:46Z" product-name="dataquery">
+		<header/>
+		<body>
+			<trans-unit id="limits" xml:space="preserve">
+				<source>Limits</source>
+			</trans-unit>
+			<trans-unit id="query.success" xml:space="preserve">
+				<source>The query was parsed successfully</source>
+			</trans-unit>
+			<trans-unit id="query.failure" xml:space="preserve">
+				<source>The query is not valid</source>
+			</trans-unit>
+			<trans-unit id="query.warning" xml:space="preserve">
+				<source>Problems in the query</source>
+			</trans-unit>
+			<trans-unit id="query.executionSuccessful" xml:space="preserve">
+				<source>The query was executed successfully. Note that this is probably not the query that will be eventually executed, as it misses all the filters, TYPO3-specific conditions, etc.</source>
+			</trans-unit>
+			<trans-unit id="query.executionFailed" xml:space="preserve">
+				<source>The query execution failed with the following error: %s</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1272556228" xml:space="preserve">
+				<source>The SELECT keyword is missing. Please add it.</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1272556601" xml:space="preserve">
+				<source>The FROM keyword is missing or is written in lowercase. Please add it or use uppercase.</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1280323976" xml:space="preserve">
+				<source>No columns selected. Nothing was detected between the SELECT and the FROM keywords.</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1272954424" xml:space="preserve">
+				<source>Bad SQL syntax, opening and closing brackets are not balanced. Note that Data Query supports only a sub-set of SQL features. It may also be that the query uses unsupported SQL elements. Please refer to the manual.</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1280323639" xml:space="preserve">
+				<source>No table name was found after the FROM statement. Note that Data Query supports only a sub-set of SQL features. It may also be that the query uses unsupported SQL elements. Please refer to the manual.</source>
+			</trans-unit>
+			<trans-unit id="query.exception-1313354033" xml:space="preserve">
+				<source>A &quot;uid&quot; field seems to be missing for the main table. You must set it manually when using the DISTINCT keyword. Please refer to the manual.</source>
+			</trans-unit>
+			<trans-unit id="wizard.check.debugTab" xml:space="preserve">
+				<source>Validate</source>
+			</trans-unit>
+			<trans-unit id="wizard.check.previewTab" xml:space="preserve">
+				<source>Preview</source>
+			</trans-unit>
+			<trans-unit id="wizard.check.debugQuery" xml:space="preserve">
+				<source>Validate the query</source>
+			</trans-unit>
+			<trans-unit id="wizard.check.previewQuery" xml:space="preserve">
+				<source>Preview query results</source>
+			</trans-unit>
+			<trans-unit id="wizard.check.validateButton" xml:space="preserve">
+				<source>Validate Query</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

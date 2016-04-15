@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 return array(
 	'ctrl' => array (
-		'title' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries',
+		'title' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries',
 		'label' => 'title',
 		'descriptionColumn' => 'description',
 		'tstamp' => 'tstamp',
@@ -44,7 +44,7 @@ return array(
 		),
 		'title' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.title',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.title',
 			'config' => array(
 				'type' => 'input',
 				'size' => '30',
@@ -53,7 +53,7 @@ return array(
 		),
 		'description' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.description',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.description',
 			'config' => array(
 				'type' => 'text',
 				'cols' => '30',
@@ -62,7 +62,7 @@ return array(
 		),
 		'sql_query' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.sql_query',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.sql_query',
 			'config' => array(
 				'type' => 'text',
 				'cols' => '30',
@@ -71,7 +71,7 @@ return array(
 					'_PADDING' => 2,
 					'check' => array(
 						'type' => 'userFunc',
-						'userFunc' => 'Tesseract\Dataquery\Wizard\QueryCheckWizard->render'
+						'userFunc' => 'Tesseract\\Dataquery\\Wizard\\QueryCheckWizard->render'
 					)
 				)
 			)
@@ -86,7 +86,7 @@ return array(
 		),
 		'cache_duration' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.cache_duration',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.cache_duration',
 			'config' => array(
 				'type' => 'input',
 				'size' => 20,
@@ -96,20 +96,20 @@ return array(
 		),
 		'ignore_enable_fields' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_enable_fields',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_enable_fields',
 			'config' => array(
 				'type' => 'radio',
 				'default' => 0,
 				'items' => array(
-					array('LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_enable_fields.I.0', '0'), # don't ignore
-					array('LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_enable_fields.I.1', '1'), # ignore everything
-					array('LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_enable_fields.I.2', '2'), # ignore partially
+					array('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_enable_fields.I.0', '0'), # don't ignore
+					array('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_enable_fields.I.1', '1'), # ignore everything
+					array('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_enable_fields.I.2', '2'), # ignore partially
 				),
 			)
 		),
 		'ignore_time_for_tables' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_time_for_tables',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_time_for_tables',
 			'config' => array(
 				'type' => 'input',
 				'size' => 255,
@@ -118,7 +118,7 @@ return array(
 		),
 		'ignore_disabled_for_tables' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_disabled_for_tables',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_disabled_for_tables',
 			'config' => array(
 				'type' => 'input',
 				'size' => 255,
@@ -127,7 +127,7 @@ return array(
 		),
 		'ignore_fegroup_for_tables' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_fegroup_for_tables',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_fegroup_for_tables',
 			'config' => array(
 				'type' => 'input',
 				'size' => 255,
@@ -136,18 +136,18 @@ return array(
 		),
 		'ignore_language_handling' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_language_handling',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_language_handling',
 			'config' => array(
 				'type' => 'check',
 				'default' => 0,
 				'items' => array(
-					array('LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.ignore_language_handling.I.0', ''),
+					array('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.ignore_language_handling.I.0', ''),
 				),
 			)
 		),
 		'skip_overlays_for_tables' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.skip_overlays_for_tables',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.skip_overlays_for_tables',
 			'config' => array(
 				'type' => 'input',
 				'size' => 255,
@@ -155,7 +155,7 @@ return array(
 		),
 		'get_versions_directly' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.get_versions_directly',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.get_versions_directly',
 			'config' => array(
 				'type' => 'input',
 				'size' => 255,
@@ -165,7 +165,7 @@ return array(
 	'types' => array(
 		'0' => array(
 			'showitem' => 'hidden, title;;1, sql_query, fulltext_indices,
-							--div--;LLL:EXT:dataquery/locallang_db.xml:tx_dataquery_queries.tab.advanced, cache_duration, ignore_enable_fields;;2, ignore_language_handling;;3, get_versions_directly'
+							--div--;LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.tab.advanced, cache_duration, ignore_enable_fields;;2, ignore_language_handling;;3, get_versions_directly'
 		)
 	),
 	'palettes' => array(

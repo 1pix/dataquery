@@ -74,7 +74,7 @@ class AjaxHandler
             // Build the query
             $parsedQuery = $parser->buildQuery();
             // The query building completed, issue success message
-            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.success');
+            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.success');
             $parsingMessage = $parsedQuery;
 
             // Force a LIMIT to 1 and try executing the query
@@ -89,19 +89,19 @@ class AjaxHandler
                 $executionSeverity = FlashMessage::ERROR;
                 $errorMessage = $databaseConnection->sql_error();
                 $executionMessage = sprintf(
-                        $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionFailed'),
+                        $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.executionFailed'),
                         $errorMessage
                 );
             } else {
-                $executionMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionSuccessful');
+                $executionMessage = $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.executionSuccessful');
             }
         } catch (\Exception $e) {
             // The query parsing failed, issue error message
             $parsingSeverity = FlashMessage::ERROR;
-            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.failure');
+            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.failure');
             $exceptionCode = $e->getCode();
             // Display "improved" exception message (if available)
-            $parsingMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.exception-' . $exceptionCode);
+            $parsingMessage = $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.exception-' . $exceptionCode);
             // If some unexpected exception occurred, display original message
             if (empty($parsingMessage)) {
                 $parsingMessage = $e->getMessage();
@@ -121,7 +121,7 @@ class AjaxHandler
             $flashMessage = GeneralUtility::makeInstance(
                     FlashMessage::class,
                     $warningMessage,
-                    $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.warning'),
+                    $languageService->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:query.warning'),
                     FlashMessage::WARNING
             );
             $flashMessageQueue->enqueue($flashMessage);

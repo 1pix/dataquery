@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-15T15:20:08Z" product-name="dataquery">
+		<header/>
+		<body>
+			<trans-unit id="tx_dataquery_queries" xml:space="preserve">
+				<source>Data Query</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.tab.advanced" xml:space="preserve">
+				<source>Advanced</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.title" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.description" xml:space="preserve">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.sql_query" xml:space="preserve">
+				<source>SQL Query</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.fulltext_indices" xml:space="preserve">
+				<source>Full Text Indices</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.cache_duration" xml:space="preserve">
+				<source>Cache duration (in seconds)</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_enable_fields" xml:space="preserve">
+				<source>Ignore enable fields</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_enable_fields.I.0" xml:space="preserve">
+				<source>Don't ignore any fields</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_enable_fields.I.1" xml:space="preserve">
+				<source>Ignore all fields</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_enable_fields.I.2" xml:space="preserve">
+				<source>Ignore some fields for some tables (defined below)</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_time_for_tables" xml:space="preserve">
+				<source>Ignore start time and end time condition for tables:</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_disabled_for_tables" xml:space="preserve">
+				<source>Ignore &quot;hidden&quot; field for tables:</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_fegroup_for_tables" xml:space="preserve">
+				<source>Ignore access rights for tables:</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_language_handling" xml:space="preserve">
+				<source>Language handling</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.ignore_language_handling.I.0" xml:space="preserve">
+				<source>Ignore language handling (show records from all languages)</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.skip_overlays_for_tables" xml:space="preserve">
+				<source>Don't overlay tables:</source>
+			</trans-unit>
+			<trans-unit id="tx_dataquery_queries.get_versions_directly" xml:space="preserve">
+				<source>Directly get version overlays for tables:</source>
+			</trans-unit>
+			<trans-unit id="wizards.add_dataquery" xml:space="preserve">
+				<source>Add a new Data Query</source>
+			</trans-unit>
+			<trans-unit id="tx_datafilter_filters.tx_dataquery_sql" xml:space="preserve">
+				<source>Additional SQL WHERE clause</source>
+			</trans-unit>
+			<trans-unit id="sql" xml:space="preserve">
+				<source>SQL</source>
+			</trans-unit>
+			<trans-unit id="fulltext.no_query" xml:space="preserve">
+				<source>To check for FULLTEXT indices, please write a query first and save it at least once.</source>
+			</trans-unit>
+			<trans-unit id="fulltext.table_name" xml:space="preserve">
+				<source>Table (with FULLTEXT index)</source>
+			</trans-unit>
+			<trans-unit id="fulltext.fulltext_fields" xml:space="preserve">
+				<source>Fields composing the FULLTEXT index</source>
+			</trans-unit>
+			<trans-unit id="fulltext.no_index_or_missing_table" xml:space="preserve">
+				<source>No FULLTEXT index found for this table or incomplete SQL query.</source>
+			</trans-unit>
+			<trans-unit id="fulltext.no_index" xml:space="preserve">
+				<source>No FULLTEXT index for table &quot;%s&quot;.</source>
+			</trans-unit>
+			<trans-unit id="fulltext.tables_list" xml:space="preserve">
+				<source>FULLTEXT index found in table(s): %s</source>
+			</trans-unit>
+			<trans-unit id="fulltext.no_table_found" xml:space="preserve">
+				<source>Actually, I couldn't find any tables having a FULLTEXT index.</source>
+			</trans-unit>
+			<trans-unit id="fulltext.indexed_fields" xml:space="preserve">
+				<source>where &quot;%s&quot; is an index composed by fields: %s</source>
+			</trans-unit>
+			<trans-unit id="fulltext.syntax_for_query" xml:space="preserve">
+				<source>Marker to be placed in the SELECT part:</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

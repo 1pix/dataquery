@@ -75,10 +75,10 @@ class FormEngine
      */
     public function renderFulltextIndices($parameters, UserElement $userField)
     {
-        $output = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_index_or_missing_table');
+        $output = $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.no_index_or_missing_table');
 
         if (empty($parameters['row']['sql_query'])) {
-            $output = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_query');
+            $output = $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.no_query');
         } else {
 
             // Fetch the query parts
@@ -112,11 +112,11 @@ class FormEngine
         foreach ($fields as $index => $indexedFields) {
             $output .= sprintf(
                     '%s <strong>fulltext:%s AS foo</strong>',
-                    $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.syntax_for_query'),
+                    $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.syntax_for_query'),
                     $index
             );
             $output .= sprintf(
-                    '<br/>' . $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.indexed_fields') . '<br/>',
+                    '<br/>' . $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.indexed_fields') . '<br/>',
                     $index,
                     $indexedFields
             );
@@ -134,16 +134,16 @@ class FormEngine
     {
         $outputs = array();
 
-        $string = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_index');
+        $string = $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.no_index');
         $outputs[] = sprintf($string, $this->table);
 
         $tables = $this->analyser->getTables();
         if (!empty($tables)) {
             $listOfTables = implode(', ', $tables);
-            $string = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.tables_list');
+            $string = $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.tables_list');
             $outputs[] = sprintf($string, $listOfTables);
         } else {
-            $outputs[] = $this->language->sL('LLL:EXT:dataquery/locallang_db.xlf:fulltext.no_table_found');
+            $outputs[] = $this->language->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:fulltext.no_table_found');
         }
         return implode('<br>', $outputs);
     }
