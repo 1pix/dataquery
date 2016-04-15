@@ -18,7 +18,7 @@ return array(
 		),
 		'searchFields' => 'title,description,sql_query',
 		'typeicon_classes' => array(
-			'default' => 'extensions-dataquery-query'
+			'default' => 'tx_dataquery-dataquery'
 		),
 		'dividers2tabs' => 1,
 	),

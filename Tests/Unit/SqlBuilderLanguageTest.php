@@ -21,22 +21,24 @@ namespace Tesseract\Dataquery\Tests\Unit;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class SqlBuilderLanguageTest extends SqlBuilderTest {
+class SqlBuilderLanguageTest extends SqlBuilderTest
+{
 
-	/**
-	 * @var	string	Language-related SQL condition to apply to tt_content table
-	 */
-	protected $baseLanguageConditionForTable = "(###TABLE###.sys_language_uid IN (0,-1) OR (###TABLE###.sys_language_uid = '2' AND ###TABLE###.l18n_parent = '0'))";
+    /**
+     * @var    string    Language-related SQL condition to apply to tt_content table
+     */
+    protected $baseLanguageConditionForTable = "(###TABLE###.sys_language_uid IN (0,-1) OR (###TABLE###.sys_language_uid = '2' AND ###TABLE###.l18n_parent = '0'))";
 
-	/**
-	 * Sets up a different language
-	 *
-	 * @return void
-	 */
-	public function setUp() {
-		parent::setUp();
+    /**
+     * Sets up a different language
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-		// Set a different language than default
-		$GLOBALS['TSFE']->sys_language_content = 2;
-	}
+        // Set a different language than default
+        $GLOBALS['TSFE']->sys_language_content = 2;
+    }
 }

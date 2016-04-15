@@ -23,74 +23,77 @@ use Tesseract\Dataquery\Component\DataProvider;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class DataProviderTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
-	/**
-	 * Provides array(s) to sort
-	 *
-	 * @return array
-	 */
-	public function stuffToSortProvider() {
-		$stuffToSort = array(
-			'standard case' => array(
-				'records' => array(
-					0 => array(
-						'name' => 'Arthur Dent',
-						'age' => '22'
-					),
-					1 => array(
-						'name' => 'Slartibartfast',
-						'age' => '12'
-					),
-					2 => array(
-						'name' => 'Ford Prefect',
-						'age' => '12'
-					),
-					3 => array(
-						'name' => 'Zaphod Beeblebrox',
-						'age' => '1'
-					),
-					4 => array(
-						'name' => 'Prostetnic Vogon Jeltz',
-						'age' => '2'
-					),
-				),
-				'result' => array(
-					0 => array(
-						'name' => 'Zaphod Beeblebrox',
-						'age' => '1'
-					),
-					1 => array(
-						'name' => 'Prostetnic Vogon Jeltz',
-						'age' => '2'
-					),
-					2 => array(
-						'name' => 'Ford Prefect',
-						'age' => '12'
-					),
-					3 => array(
-						'name' => 'Slartibartfast',
-						'age' => '12'
-					),
-					4 => array(
-						'name' => 'Arthur Dent',
-						'age' => '22'
-					),
-				)
-			)
-		);
-		return $stuffToSort;
-	}
+class DataProviderTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+{
+    /**
+     * Provides array(s) to sort
+     *
+     * @return array
+     */
+    public function stuffToSortProvider()
+    {
+        $stuffToSort = array(
+                'standard case' => array(
+                        'records' => array(
+                                0 => array(
+                                        'name' => 'Arthur Dent',
+                                        'age' => '22'
+                                ),
+                                1 => array(
+                                        'name' => 'Slartibartfast',
+                                        'age' => '12'
+                                ),
+                                2 => array(
+                                        'name' => 'Ford Prefect',
+                                        'age' => '12'
+                                ),
+                                3 => array(
+                                        'name' => 'Zaphod Beeblebrox',
+                                        'age' => '1'
+                                ),
+                                4 => array(
+                                        'name' => 'Prostetnic Vogon Jeltz',
+                                        'age' => '2'
+                                ),
+                        ),
+                        'result' => array(
+                                0 => array(
+                                        'name' => 'Zaphod Beeblebrox',
+                                        'age' => '1'
+                                ),
+                                1 => array(
+                                        'name' => 'Prostetnic Vogon Jeltz',
+                                        'age' => '2'
+                                ),
+                                2 => array(
+                                        'name' => 'Ford Prefect',
+                                        'age' => '12'
+                                ),
+                                3 => array(
+                                        'name' => 'Slartibartfast',
+                                        'age' => '12'
+                                ),
+                                4 => array(
+                                        'name' => 'Arthur Dent',
+                                        'age' => '22'
+                                ),
+                        )
+                )
+        );
+        return $stuffToSort;
+    }
 
-	/**
-	 * @param array $records Unsorted records
-	 * @param array $result Sorted records
-	 * @test
-	 * @dataProvider stuffToSortProvider
-	 */
-	public function testSortingMethod($records, $result) {
-		DataProvider::$sortingFields[0]['field'] = 'age';
-		DataProvider::$sortingFields[1]['field'] = 'name';
-		usort($records, array('\Tesseract\Dataquery\Component\DataProvider', 'sortRecordset'));
-		$this->assertEquals($result, $records);
-	}
+    /**
+     * @param array $records Unsorted records
+     * @param array $result Sorted records
+     * @test
+     * @dataProvider stuffToSortProvider
+     */
+    public function testSortingMethod($records, $result)
+    {
+        DataProvider::$sortingFields[0]['field'] = 'age';
+        DataProvider::$sortingFields[1]['field'] = 'name';
+        usort($records, array('\Tesseract\Dataquery\Component\DataProvider', 'sortRecordset'));
+        self::assertEquals($result, $records);
+    }
 }

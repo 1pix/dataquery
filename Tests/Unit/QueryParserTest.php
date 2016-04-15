@@ -14,6 +14,9 @@ namespace Tesseract\Dataquery\Tests\Unit;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Tesseract\Dataquery\Component\DataProvider;
+use Tesseract\Dataquery\Parser\QueryParser;
+use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -23,70 +26,75 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class QueryParserTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
-	/**
-	 * Provides fields to test for them being text or not.
-	 *
-	 * @return array
-	 */
-	public function tablesAndFieldsProvider() {
-		$fields = array(
-			// Text (single line) field
-			'tt_content.header' => array(
-				'table' => 'tt_content',
-				'field' => 'header',
-				'result' => TRUE
-			),
-			// Text (multi-line) field
-			'tt_content.bodytext' => array(
-				'table' => 'tt_content',
-				'field' => 'bodytext',
-				'result' => TRUE
-			),
-			// No TCA, will default to be considered a text field
-			'tt_content.crdate' => array(
-				'table' => 'tt_content',
-				'field' => 'bodytext',
-				'result' => TRUE
-			),
-			// Date and time, not a text field
-			'tt_content.starttime' => array(
-				'table' => 'tt_content',
-				'field' => 'starttime',
-				'result' => FALSE
-			),
-			// Integer, not a date field
-			'tt_content.CType' => array(
-				'table' => 'tt_content',
-				'field' => 'CType',
-				'result' => FALSE
-			),
-		);
-		return $fields;
-	}
+class QueryParserTest extends UnitTestCase
+{
+    /**
+     * Provides fields to test for them being text or not.
+     *
+     * @return array
+     */
+    public function tablesAndFieldsProvider()
+    {
+        $fields = array(
+            // Text (single line) field
+            'tt_content.header' => array(
+                    'table' => 'tt_content',
+                    'field' => 'header',
+                    'result' => true
+            ),
+            // Text (multi-line) field
+            'tt_content.bodytext' => array(
+                    'table' => 'tt_content',
+                    'field' => 'bodytext',
+                    'result' => true
+            ),
+            // No TCA, will default to be considered a text field
+            'tt_content.crdate' => array(
+                    'table' => 'tt_content',
+                    'field' => 'bodytext',
+                    'result' => true
+            ),
+            // Date and time, not a text field
+            'tt_content.starttime' => array(
+                    'table' => 'tt_content',
+                    'field' => 'starttime',
+                    'result' => false
+            ),
+            // Integer, not a date field
+            'tt_content.CType' => array(
+                    'table' => 'tt_content',
+                    'field' => 'CType',
+                    'result' => false
+            ),
+        );
+        return $fields;
+    }
 
-	/**
-	 * Test the text detection routine.
-	 *
-	 * @param string $table Name of the table
-	 * @param string $field Name of the field
-	 * @param boolean $result The expected result
-	 * @test
-	 * @dataProvider tablesAndFieldsProvider
-	 */
-	public function detectTextField($table, $field, $result) {
-		$dataqueryWrapper = $this->getMock('Tesseract\\Dataquery\\Component\\DataProvider');
-		/** @var \Tesseract\Dataquery\Parser\QueryParser $parser */
-		$parser = GeneralUtility::makeInstance(
-			'Tesseract\\Dataquery\\Parser\\QueryParser',
-			$dataqueryWrapper
-		);
-		$this->assertEquals(
-			$parser->isATextField(
-				$table,
-				$field
-			),
-			$result
-		);
-	}
+    /**
+     * Test the text detection routine.
+     *
+     * @param string $table Name of the table
+     * @param string $field Name of the field
+     * @param boolean $result The expected result
+     * @test
+     * @dataProvider tablesAndFieldsProvider
+     */
+    public function detectTextField($table, $field, $result)
+    {
+        $dataqueryWrapper = $this->getMock(
+                DataProvider::class
+        );
+        /** @var QueryParser $parser */
+        $parser = GeneralUtility::makeInstance(
+                QueryParser::class,
+                $dataqueryWrapper
+        );
+        self::assertEquals(
+                $parser->isATextField(
+                        $table,
+                        $field
+                ),
+                $result
+        );
+    }
 }

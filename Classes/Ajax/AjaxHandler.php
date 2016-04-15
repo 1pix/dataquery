@@ -14,8 +14,10 @@ namespace Tesseract\Dataquery\Ajax;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Tesseract\Dataquery\Parser\QueryParser;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -25,107 +27,118 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class AjaxHandler {
+class AjaxHandler
+{
 
-	/**
-	 * Returns the parsed query through dataquery parser
-	 * or error messages from exceptions should any have been thrown
-	 * during query parsing.
-	 *
-	 * @param array $parameters Empty array (yes, that's weird but true)
-	 * @param AjaxRequestHandler $ajaxObj Back-reference to the calling object
-	 * @return	void
-	 */
-	public function validate($parameters, AjaxRequestHandler $ajaxObj) {
-		$parsingSeverity = FlashMessage::OK;
-		$executionSeverity = FlashMessage::OK;
-		$executionMessage = '';
-		$warningMessage = '';
-		/** @var \TYPO3\CMS\Lang\LanguageService $languageService */
-		$languageService = $GLOBALS['LANG'];
+    /**
+     * Returns the parsed query through dataquery parser
+     * or error messages from exceptions should any have been thrown
+     * during query parsing.
+     *
+     * @param array $parameters Empty array (yes, that's weird but true)
+     * @param AjaxRequestHandler $ajaxObj Back-reference to the calling object
+     * @return    void
+     */
+    public function validate($parameters, AjaxRequestHandler $ajaxObj)
+    {
+        $flashMessageQueue = GeneralUtility::makeInstance(
+                FlashMessageQueue::class,
+                'tx_datafilter_ajax'
+        );
+        $parsingSeverity = FlashMessage::OK;
+        $executionSeverity = FlashMessage::OK;
+        $executionMessage = '';
+        $warningMessage = '';
+        /** @var \TYPO3\CMS\Lang\LanguageService $languageService */
+        $languageService = $GLOBALS['LANG'];
 
-		// Try parsing and building the query
-		try {
-			// Get the query to parse from the GET/POST parameters
-			$query = GeneralUtility::_GP('query');
-			// Create an instance of the parser
-			// NOTE: NULL is passed for the parent object as there's no controller in this context,
-			// but that's a bit risky. Maybe extension "tesseract" could provide a dummy controller
-			// (or some logic should be split: the query parser should not also be a query builder).
-			/** @var $parser \Tesseract\Dataquery\Parser\QueryParser */
-			$parser = GeneralUtility::makeInstance('Tesseract\\Dataquery\\Parser\\QueryParser', NULL);
-			// Clean up and prepare the query string
-			$query = $parser->prepareQueryString($query);
-			// Parse the query
-			// NOTE: if the parsing fails, an exception will be received, which is handled further down
-			// The parser may return a warning, though
-			$warningMessage = $parser->parseQuery($query);
-			// Build the query
-			$parsedQuery = $parser->buildQuery();
-			// The query building completed, issue success message
-			$parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.success');
-			$parsingMessage = $parsedQuery;
+        // Try parsing and building the query
+        try {
+            // Get the query to parse from the GET/POST parameters
+            $query = GeneralUtility::_GP('query');
+            // Create an instance of the parser
+            // NOTE: NULL is passed for the parent object as there's no controller in this context,
+            // but that's a bit risky. Maybe extension "tesseract" could provide a dummy controller
+            // (or some logic should be split: the query parser should not also be a query builder).
+            /** @var $parser QueryParser */
+            $parser = GeneralUtility::makeInstance(
+                    QueryParser::class,
+                    null
+            );
+            // Clean up and prepare the query string
+            $query = $parser->prepareQueryString($query);
+            // Parse the query
+            // NOTE: if the parsing fails, an exception will be received, which is handled further down
+            // The parser may return a warning, though
+            $warningMessage = $parser->parseQuery($query);
+            // Build the query
+            $parsedQuery = $parser->buildQuery();
+            // The query building completed, issue success message
+            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.success');
+            $parsingMessage = $parsedQuery;
 
-			// Force a LIMIT to 1 and try executing the query
-			$parser->getSQLObject()->structure['LIMIT'] = 1;
-			// Rebuild the query with the new limit
-			$executionQuery = $parser->buildQuery();
-			// Execute query and report outcome
-			/** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-			$databaseConnection = $GLOBALS['TYPO3_DB'];
-			$res = $databaseConnection->sql_query($executionQuery);
-			if ($res === FALSE) {
-				$executionSeverity = FlashMessage::ERROR;
-				$errorMessage = $databaseConnection->sql_error();
-				$executionMessage = sprintf(
-					$languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionFailed'),
-					$errorMessage
-				);
-			} else {
-				$executionMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionSuccessful');
-			}
-		}
-		catch(\Exception $e) {
-			// The query parsing failed, issue error message
-			$parsingSeverity = FlashMessage::ERROR;
-			$parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.failure');
-			$exceptionCode = $e->getCode();
-			// Display "improved" exception message (if available)
-			$parsingMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.exception-' . $exceptionCode);
-			// If some unexpected exception occurred, display original message
-			if (empty($parsingMessage)) {
-				$parsingMessage = $e->getMessage();
-			}
-		}
-		// Render parsing result as flash message
-		/** @var $flashMessage FlashMessage */
-		$flashMessage = GeneralUtility::makeInstance(
-			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
-			$parsingMessage,
-			$parsingTitle,
-			$parsingSeverity
-		);
-		$content = $flashMessage->render();
-		// If a warning was returned by the query parser, display it here
-		if (!empty($warningMessage)) {
-			$flashMessage = GeneralUtility::makeInstance(
-				'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
-				$warningMessage,
-					$languageService->sL('LLL:EXT:dataquery/locallang.xml:query.warning'),
-				FlashMessage::WARNING
-			);
-			$content .= $flashMessage->render();
-		}
-		// If the query was also executed, render execution result
-		if (!empty($executionMessage)) {
-			$flashMessage = GeneralUtility::makeInstance(
-				'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
-				$executionMessage,
-				'',
-				$executionSeverity
-			);
-			$content .= $flashMessage->render();
-		}
-		$ajaxObj->addContent('dataquery', $content);
-	}
+            // Force a LIMIT to 1 and try executing the query
+            $parser->getSQLObject()->structure['LIMIT'] = 1;
+            // Rebuild the query with the new limit
+            $executionQuery = $parser->buildQuery();
+            // Execute query and report outcome
+            /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
+            $databaseConnection = $GLOBALS['TYPO3_DB'];
+            $res = $databaseConnection->sql_query($executionQuery);
+            if ($res === false) {
+                $executionSeverity = FlashMessage::ERROR;
+                $errorMessage = $databaseConnection->sql_error();
+                $executionMessage = sprintf(
+                        $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionFailed'),
+                        $errorMessage
+                );
+            } else {
+                $executionMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.executionSuccessful');
+            }
+        } catch (\Exception $e) {
+            // The query parsing failed, issue error message
+            $parsingSeverity = FlashMessage::ERROR;
+            $parsingTitle = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.failure');
+            $exceptionCode = $e->getCode();
+            // Display "improved" exception message (if available)
+            $parsingMessage = $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.exception-' . $exceptionCode);
+            // If some unexpected exception occurred, display original message
+            if (empty($parsingMessage)) {
+                $parsingMessage = $e->getMessage();
+            }
+        }
+        // Render parsing result as flash message
+        /** @var $flashMessage FlashMessage */
+        $flashMessage = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $parsingMessage,
+                $parsingTitle,
+                $parsingSeverity
+        );
+        $flashMessageQueue->enqueue($flashMessage);
+        // If a warning was returned by the query parser, display it here
+        if (!empty($warningMessage)) {
+            $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $warningMessage,
+                    $languageService->sL('LLL:EXT:dataquery/locallang.xml:query.warning'),
+                    FlashMessage::WARNING
+            );
+            $flashMessageQueue->enqueue($flashMessage);
+        }
+        // If the query was also executed, render execution result
+        if (!empty($executionMessage)) {
+            $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $executionMessage,
+                    '',
+                    $executionSeverity
+            );
+            $flashMessageQueue->enqueue($flashMessage);
+        }
+        $ajaxObj->addContent(
+                'dataquery',
+                $flashMessageQueue->renderFlashMessages()
+        );
+    }
 }

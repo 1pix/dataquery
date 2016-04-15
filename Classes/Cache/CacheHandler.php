@@ -21,22 +21,24 @@ namespace Tesseract\Dataquery\Cache;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class CacheHandler {
+class CacheHandler
+{
 
-	/**
-	 * Clears the dataquery for selected pages only.
-	 *
-	 * @param array $parameters Parameters passed by DataHandler, including the pages to clear the cache for
-	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject Reference to the calling DataHandler object
-	 * @return void
-	 */
-	public function clearCache($parameters, $parentObject) {
-		// Clear the dataquery cache for all the pages passed to this method
-		if (isset($parameters['pageIdArray']) && count($parameters['pageIdArray']) > 0) {
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery(
-				'tx_dataquery_cache',
-				'page_id IN (' . implode(',', $parameters['pageIdArray']) . ')'
-			);
-		}
-	}
+    /**
+     * Clears the dataquery for selected pages only.
+     *
+     * @param array $parameters Parameters passed by DataHandler, including the pages to clear the cache for
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject Reference to the calling DataHandler object
+     * @return void
+     */
+    public function clearCache($parameters, $parentObject)
+    {
+        // Clear the dataquery cache for all the pages passed to this method
+        if (isset($parameters['pageIdArray']) && count($parameters['pageIdArray']) > 0) {
+            $GLOBALS['TYPO3_DB']->exec_DELETEquery(
+                    'tx_dataquery_cache',
+                    'page_id IN (' . implode(',', $parameters['pageIdArray']) . ')'
+            );
+        }
+    }
 }

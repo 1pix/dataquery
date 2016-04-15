@@ -21,5 +21,6 @@ namespace Tesseract\Dataquery\Exception;
  * @package TYPO3
  * @subpackage tx_tesseract
  */
-class InvalidQueryException extends \Exception {
+class InvalidQueryException extends \Exception
+{
 }

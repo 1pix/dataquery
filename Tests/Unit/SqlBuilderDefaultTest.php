@@ -23,5 +23,6 @@ namespace Tesseract\Dataquery\Tests\Unit;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class SqlBuilderDefaultTest extends SqlBuilderTest {
+class SqlBuilderDefaultTest extends SqlBuilderTest
+{
 }

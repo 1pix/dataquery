@@ -1,5 +1,7 @@
 <?php
-if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
+if (!defined ('TYPO3_MODE')) {
+	die ('Access denied.');
+}
 
 // Register as Data Provider service
 // Note that the subtype corresponds to the name of the database table
@@ -22,7 +24,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 		'os' => '',
 		'exec' => '',
 
-		'className' => 'Tesseract\Dataquery\Component\DataProvider',
+		'className' => \Tesseract\Dataquery\Component\DataProvider::class,
 	)
 );
 
@@ -33,8 +35,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clea
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearPageCacheEval']['tx_dataquery'] = 'Tesseract\Dataquery\Cache\CacheHandler->clearCache';
 
 // Register a hook with datafilter to handle the extra field added by dataquery
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['datafilter']['postprocessReturnValue']['tx_dataquery'] = 'Tesseract\Dataquery\Hook\DataFilterHook';
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['datafilter']['postprocessEmptyFilterCheck']['tx_dataquery'] = 'Tesseract\Dataquery\Hook\DataFilterHook';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['datafilter']['postprocessReturnValue']['tx_dataquery'] = \Tesseract\Dataquery\Hook\DataFilterHook::class;
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['datafilter']['postprocessEmptyFilterCheck']['tx_dataquery'] = \Tesseract\Dataquery\Hook\DataFilterHook::class;
 
 // Register wizard validation method with generic BE ajax calls handler
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(

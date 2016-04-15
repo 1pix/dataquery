@@ -21,16 +21,17 @@ namespace Tesseract\Dataquery\Cache;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-interface CacheParametersProcessorInterface {
-	/**
-	 * This method must be implemented for processing cache parameters.
-	 *
-	 * It receives a reference to the current cache parameters and a back-reference to the calling object.
-	 * It is expected to return the cache parameters, modified or not.
-	 *
-	 * @param array $cacheParameters Current cache parameters
-	 * @param \Tesseract\Dataquery\Component\DataProvider $parentObject Back-reference to the calling object
-	 * @return array Modified cache parameters
-	 */
-	public function processCacheParameters($cacheParameters, $parentObject);
+interface CacheParametersProcessorInterface
+{
+    /**
+     * This method must be implemented for processing cache parameters.
+     *
+     * It receives a reference to the current cache parameters and a back-reference to the calling object.
+     * It is expected to return the cache parameters, modified or not.
+     *
+     * @param array $cacheParameters Current cache parameters
+     * @param \Tesseract\Dataquery\Component\DataProvider $parentObject Back-reference to the calling object
+     * @return array Modified cache parameters
+     */
+    public function processCacheParameters($cacheParameters, $parentObject);
 }

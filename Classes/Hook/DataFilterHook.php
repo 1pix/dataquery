@@ -26,35 +26,38 @@ use Tesseract\Datafilter\PostprocessEmptyFilterCheckInterface;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class DataFilterHook implements PostprocessFilterInterface, PostprocessEmptyFilterCheckInterface {
+class DataFilterHook implements PostprocessFilterInterface, PostprocessEmptyFilterCheckInterface
+{
 
-	/**
-	 * Handles the tx_dataquery_sql field and adds it
-	 * to the filter itself.
-	 *
-	 * @param DataFilter $filter A datafilter object
-	 * @return void
-	 */
-	public function postprocessFilter(DataFilter $filter) {
-		$filterData = $filter->getData();
-		if (!empty($filterData['tx_dataquery_sql'])) {
-			// Parse any expressions inside the additional sql field
-			$additionalSQL = ExpressionParser::evaluateString($filterData['tx_dataquery_sql'], FALSE);
-			$filterArray = $filter->getFilter();
-			$filterArray['rawSQL'] = $additionalSQL;
-			$filter->setFilter($filterArray);
-		}
-	}
+    /**
+     * Handles the tx_dataquery_sql field and adds it
+     * to the filter itself.
+     *
+     * @param DataFilter $filter A datafilter object
+     * @return void
+     */
+    public function postprocessFilter(DataFilter $filter)
+    {
+        $filterData = $filter->getData();
+        if (!empty($filterData['tx_dataquery_sql'])) {
+            // Parse any expressions inside the additional sql field
+            $additionalSQL = ExpressionParser::evaluateString($filterData['tx_dataquery_sql'], false);
+            $filterArray = $filter->getFilter();
+            $filterArray['rawSQL'] = $additionalSQL;
+            $filter->setFilter($filterArray);
+        }
+    }
 
-	/**
-	 * Modified the empty filter check to take the tx_dataquery_sql field into account.
-	 *
-	 * @param boolean $isEmpty Current value of the is filter empty flag
-	 * @param DataFilter $filter The calling filter object
-	 * @return boolean
-	 */
-	public function postprocessEmptyFilterCheck($isEmpty, DataFilter $filter) {
-		$filterStructure = $filter->getFilter();
-		return $isEmpty && empty($filterStructure['rawSQL']);
-	}
+    /**
+     * Modified the empty filter check to take the tx_dataquery_sql field into account.
+     *
+     * @param boolean $isEmpty Current value of the is filter empty flag
+     * @param DataFilter $filter The calling filter object
+     * @return boolean
+     */
+    public function postprocessEmptyFilterCheck($isEmpty, DataFilter $filter)
+    {
+        $filterStructure = $filter->getFilter();
+        return $isEmpty && empty($filterStructure['rawSQL']);
+    }
 }
