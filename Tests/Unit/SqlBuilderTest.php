@@ -32,6 +32,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 abstract class SqlBuilderTest extends UnitTestCase
 {
+    /**
+     * @var array List of globals to exclude (contain closures which cannot be serialized)
+     */
+    protected $backupGlobalsBlacklist = array('TYPO3_LOADED_EXT', 'TYPO3_CONF_VARS');
 
     /**
      * @var string Base SQL condition to apply to tt_content table

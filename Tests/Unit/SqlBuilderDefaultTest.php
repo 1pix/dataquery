@@ -14,6 +14,17 @@ namespace Tesseract\Dataquery\Tests\Unit;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+// Workaround as I can't seem to get my test classes included via composer
+// Should be improved at a later date
+require_once(
+    ExtensionManagementUtility::extPath(
+            'dataquery',
+            'Tests/Unit/SqlBuilderTest.php'
+    )
+);
+
 /**
  * Testcase for the Data Query query builder
  * It is empty because it is just designed to run the tests from its parent class
