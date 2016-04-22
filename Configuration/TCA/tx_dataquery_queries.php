@@ -78,7 +78,7 @@ return array(
 		),
 		'fulltext_indices' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:dataquery/locallang_db.xlf:tx_dataquery_queries.fulltext_indices',
+			'label' => 'LLL:EXT:dataquery/Resources/Private/Language/locallang_db.xlf:tx_dataquery_queries.fulltext_indices',
 			'config' => array(
 				'type' => 'user',
 				'userFunc' => 'Tesseract\Dataquery\UserFunction\FormEngine->renderFulltextIndices',

@@ -23,7 +23,7 @@ General tab
 .. figure:: ../Images/DataqueryRecordGeneralTab.png
 	:alt: General tab of dataquery record
 
-	The "General" tab of a dataquery record, with query verified
+	The "General" tab of a dataquery record
 
 The "Hide" field is currently not actively used (i.e. the
 Display Controller does not check for it). It can be used to indicate
@@ -42,9 +42,9 @@ Next to the "SQL query" field is a "Validate Query" button, which can
 be used to verify that the query is alright. It does two checks:
 
 - first, it parses the query and rebuilds it. The internal query parser
-  may come up with errors at that point. If it doesn't the success
-  message will display the resulting query (as in the screenshot above).
-  Note that here TYPO3 mechanisms (see below) and Data Filters are not
+  may come up with errors at that point. If it doesn't a success
+  message will display the resulting query.
+  Note that here TYPO3 CMS mechanisms (see below) and Data Filters are not
   applied. It is only the "raw" query, as typed in the text field, that
   is parsed.
 
@@ -52,6 +52,10 @@ be used to verify that the query is alright. It does two checks:
   errors early on. Note that a condition of "LIMIT 1" is applied to the
   query before executing it, to avoid draining server resources
   needlessly.
+
+The "Full Text Indices" field indicates if any fulltext index
+exists for the main table of the query and gives hint about how
+to use it.
 
 
 .. _user-manual-advanced:
@@ -64,12 +68,12 @@ Advanced tab
 
 	The "Advanced" tab of a dataquery record
 
-The "Cache duration" field defines the period during which the
-result of the query must be kept in cache. The default is 86400
-seconds (1 day). Setting a value of 0 disables the cache.
+The "Cache duration" field defines the period (in seconds) during which the
+result of the query must be kept in cache. The default is 0,
+meaning that the cache is disabled.
 See also the :ref:`Caching chapter <behind-the-scenes-caching>`.
 
-By default, "dataquery" transparently handles all of TYPO3's enable
+By default, "dataquery" transparently handles all of TYPO3 CMS's enable
 fields, i.e. hidden or disabled flag, start and end time, and
 fe\_groups access rights. This makes it very convenient to use, but
 may be undesired in some specific situations. In such a case, it is
@@ -104,9 +108,7 @@ On top of this, "dataquery" also transparently handles everything
 related to language overlays. Again it is possible to disable that
 behavior by checking the "Language handling" box. On a finer level,
 it's possible to give a list of table for which language overlays (and
-conditions) should not be applied (in the above screenshot, records
-from table "tx\_dam" will be taken in the default language and kept as
-is).
+conditions) should not be applied.
 
 Data Query also handles versioning transparently, as soon as it is
 used within a workspace. This behavior cannot be switched off. However
