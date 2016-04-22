@@ -1,8 +1,21 @@
+2016-04-22 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Enhanced fulltext search capabilities, resolves #75041
+
+2016-04-17 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Fixed failing unit tests, resolves #75722
+
 2016-04-15 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Applied PSR-2 formatting and other cleanups, resolves #75678
 	* Moved language files to XLIFF, resolves #75685
 	* Changed default query cache duration to 0, resolves #57138
+
+2016-03-14 Fabien Udriot  <fabien.udriot@ecodev.ch>
+
+	* Added composer file, resolves #75051
+	* Ensured compatibility with TYPO3 CMS 7 LTS, resolves #75052
 
 2015-09-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

@@ -689,7 +689,7 @@ abstract class SqlBuilderTest extends UnitTestCase
     public function fulltextFilterProvider()
     {
         $filters = array(
-            // Boolean mode, one word valid, one word ignore
+            // Boolean mode, one word valid, one word ignored
             'fulltext, one valid word, one invalid word' => array(
                     'filter' => array(
                             'filters' => array(
@@ -708,7 +708,7 @@ abstract class SqlBuilderTest extends UnitTestCase
                             )
                     ),
                     'index' => 'SEARCH',
-                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox"\' IN BOOLEAN MODE))'
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foox\' IN BOOLEAN MODE))'
             ),
             // Boolean mode, one word included, one word excluded
             'fulltext, one word included, one word excluded' => array(
@@ -720,7 +720,7 @@ abstract class SqlBuilderTest extends UnitTestCase
                                             'conditions' => array(
                                                     0 => array(
                                                             'operator' => 'fulltext',
-                                                            'value' => 'foox -barz',
+                                                            'value' => '+foox -barz',
                                                             'negate' => false
                                                     )
                                             )
@@ -728,7 +728,7 @@ abstract class SqlBuilderTest extends UnitTestCase
                             )
                     ),
                     'index' => 'SEARCH',
-                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox" -"barz"\' IN BOOLEAN MODE))'
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+foox -barz\' IN BOOLEAN MODE))'
             ),
             // Boolean mode with quoted string
             'fulltext, quoted string' => array(
@@ -748,7 +748,87 @@ abstract class SqlBuilderTest extends UnitTestCase
                             )
                     ),
                     'index' => 'SEARCH',
-                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"go for foox"\' IN BOOLEAN MODE))'
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'\"go for foox\"\' IN BOOLEAN MODE))'
+            ),
+            // Boolean mode with two quoted strings
+            'fulltext, two quoted string' => array(
+                    'filter' => array(
+                            'filters' => array(
+                                    0 => array(
+                                            'table' => 'tt_content',
+                                            'field' => 'score',
+                                            'conditions' => array(
+                                                    0 => array(
+                                                            'operator' => 'fulltext',
+                                                            'value' => '"foo bar" "baz ding"',
+                                                            'negate' => false
+                                                    )
+                                            )
+                                    )
+                            )
+                    ),
+                    'index' => 'SEARCH',
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'\"foo bar\" \"baz ding\"\' IN BOOLEAN MODE))'
+            ),
+            // Boolean mode with unquoted and quoted strings
+            'fulltext, unquoted and quoted string' => array(
+                    'filter' => array(
+                            'filters' => array(
+                                    0 => array(
+                                            'table' => 'tt_content',
+                                            'field' => 'score',
+                                            'conditions' => array(
+                                                    0 => array(
+                                                            'operator' => 'fulltext',
+                                                            'value' => '"foo bar" -bazy',
+                                                            'negate' => false
+                                                    )
+                                            )
+                                    )
+                            )
+                    ),
+                    'index' => 'SEARCH',
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'\"foo bar\" -bazy\' IN BOOLEAN MODE))'
+            ),
+            // Boolean mode with brackets in string
+            'fulltext, brackets in string' => array(
+                    'filter' => array(
+                            'filters' => array(
+                                    0 => array(
+                                            'table' => 'tt_content',
+                                            'field' => 'score',
+                                            'conditions' => array(
+                                                    0 => array(
+                                                            'operator' => 'fulltext',
+                                                            'value' => '+foox (>bar <baz)',
+                                                            'negate' => false
+                                                    )
+                                            )
+                                    )
+                            )
+                    ),
+                    'index' => 'SEARCH',
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+foox (>bar <baz)\' IN BOOLEAN MODE))'
+            ),
+            // Boolean mode with wildcard
+            'fulltext, with wildcard' => array(
+                    'filter' => array(
+                            'filters' => array(
+                                    0 => array(
+                                            'table' => 'tt_content',
+                                            'field' => 'score',
+                                            'conditions' => array(
+                                                    0 => array(
+                                                            'operator' => 'fulltext',
+                                                            'value' => 'foo*',
+                                                            'negate' => false
+                                                    )
+                                            )
+                                    )
+                            )
+                    ),
+                    'index' => 'SEARCH',
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foo*\' IN BOOLEAN MODE))'
             ),
             // Boolean mode, negated condition
             'fulltext, negated condition' => array(
@@ -760,7 +840,6 @@ abstract class SqlBuilderTest extends UnitTestCase
                                             'conditions' => array(
                                                     0 => array(
                                                             'operator' => 'fulltext',
-                                                            // "bar" should be ignored, as it is below minimum word length
                                                             'value' => 'foox',
                                                             'negate' => true
                                                     )
@@ -769,7 +848,7 @@ abstract class SqlBuilderTest extends UnitTestCase
                             )
                     ),
                     'index' => 'SEARCH',
-                    'fulltextCondition' => '(NOT MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'+"foox"\' IN BOOLEAN MODE))'
+                    'fulltextCondition' => '(NOT MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foox\' IN BOOLEAN MODE))'
             ),
             // Natural mode
             'fulltext natural' => array(
@@ -790,6 +869,26 @@ abstract class SqlBuilderTest extends UnitTestCase
                     ),
                     'index' => 'SEARCH',
                     'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foo bar\'))'
+            ),
+            // Natural mode, quotes get escaped
+            'fulltext natural, quotes escaped' => array(
+                    'filter' => array(
+                            'filters' => array(
+                                    0 => array(
+                                            'table' => 'tt_content',
+                                            'field' => 'score',
+                                            'conditions' => array(
+                                                    0 => array(
+                                                            'operator' => 'fulltext_natural',
+                                                            'value' => 'foo don\'t',
+                                                            'negate' => false
+                                                    )
+                                            )
+                                    )
+                            )
+                    ),
+                    'index' => 'SEARCH',
+                    'fulltextCondition' => '(MATCH(tt_content.header,tt_content.bodytext) AGAINST(\'foo don\\\'t\'))'
             ),
             // Empty search words
             'fulltext, empty search' => array(
@@ -841,7 +940,6 @@ abstract class SqlBuilderTest extends UnitTestCase
                                             'conditions' => array(
                                                     0 => array(
                                                             'operator' => 'fulltext',
-                                                            // "bar" should be ignored, as it is below minimum word length
                                                             'value' => 'foox bar',
                                                             'negate' => false
                                                     )
@@ -864,6 +962,7 @@ abstract class SqlBuilderTest extends UnitTestCase
      * @param string $fulltextCondition Interpreted condition
      * @test
      * @dataProvider fulltextFilterProvider
+     * @covers \Tesseract\Dataquery\Parser\FulltextParser
      */
     public function selectQueryWithFulltextFilter($filter, $index, $fulltextCondition)
     {
@@ -905,8 +1004,10 @@ abstract class SqlBuilderTest extends UnitTestCase
         $this->sqlParser->addFilter($filter);
         $actualResult = $this->sqlParser->buildQuery();
 
-        self::assertEquals($expectedResult, $actualResult,
-                '***Expected***' . $expectedResult . '***Actual***' . $actualResult);
+        self::assertEquals(
+                $expectedResult,
+                $actualResult
+        );
     }
 
     /**

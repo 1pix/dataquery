@@ -51,6 +51,11 @@ class FulltextParser
     protected $configuration;
 
     /**
+     * @var array List of allowed fulltext operators (see http://dev.mysql.com/doc/refman/5.6/en/fulltext-boolean.html)
+     */
+    static protected $fullTextOperators = array('+', '-', '~', '>', '<');
+
+    /**
      * Constructor
      *
      * @return FulltextParser
@@ -115,7 +120,7 @@ class FulltextParser
     public function parse($table, $index, $search, $isNaturalSearch, $isNegated)
     {
         $this->retrieveIndexedFields($table);
-        if (isset($this->indexedFields[$index])) {
+        if (array_key_exists($index, $this->indexedFields)) {
             $indexFields = $this->indexedFields[$index];
         } else {
             throw new InvalidQueryException(
@@ -123,11 +128,11 @@ class FulltextParser
                     1421769189
             );
         }
-        // Search terms from a query string will be urlencode'd
-        $processedSearchTerms = urldecode($search);
         $booleanMode = '';
-        if (!$isNaturalSearch) {
-            $processedSearchTerms = $this->processSearchTerm($processedSearchTerms);
+        if ($isNaturalSearch) {
+            $processedSearchTerms = addslashes($search);
+        } else {
+            $processedSearchTerms = $this->processSearchTerm($search);
             $booleanMode = ' IN BOOLEAN MODE';
         }
         if (empty($processedSearchTerms)) {
@@ -156,38 +161,55 @@ class FulltextParser
         $termsProcessed = array();
 
         // Handle double quote wrapping
-        if (preg_match_all('/".+"/isU', $term, $matches)) {
-
+        // Take all double-quoted strings and replace them with a ###EXTRACTED(number)### construct
+        // These terms are not processed further
+        // Terms within brackets are also not handled further
+        $searches = array();
+        $replacements = array();
+        if (preg_match_all('/["(].+[")]/isU', $term, $matches)) {
+            $counter = 1;
             foreach ($matches as $match) {
-                $searchedCharacters = array(
-                        '"',
-                        ' '
-                );
-                $replacedCharacters = array(
-                        '',
-                        '###'
-                );
-                $search = $match;
-                $replace = str_replace($searchedCharacters, $replacedCharacters, $match);
-                $term = str_replace($search, $replace, $term);
+                $searches[] = $match[0];
+                $replacements[] = '###EXTRACTED' . $counter . '###';
+                $counter++;
             }
+            $term = str_replace($searches, $replacements, $term);
         }
 
+        // Now that double-quoted and brackets-wrapped strings have been extracted,
+        // get each search term by splitting on spaces
         $terms = explode(' ', $term);
         foreach ($terms as $aTerm) {
-            if (!empty($aTerm)) {
-                // Handle exclusion of term
-                $logic = '+';
-                if (strpos($aTerm, '-') === 0) {
+            // Take extracted strings as is
+            if (strpos($aTerm, '###EXTRACTED') === 0) {
+                $termsProcessed[] = $aTerm;
+            } elseif (!empty($aTerm)) {
+                $operator = substr($aTerm, 0, 1);
+                $wildcard = substr($aTerm, -1);
+                if (in_array($operator, self::$fullTextOperators, true)) {
                     $aTerm = substr($aTerm, 1);
-                    $logic = '-';
+                } else {
+                    $operator = '';
                 }
-                if (strlen($aTerm) >= $this->configuration['fullTextMinimumWordLength']) {
-                    $termProcessed = str_replace('###', ' ', addslashes($aTerm));
-                    $termsProcessed[] = sprintf('%s"%s"', $logic, $termProcessed);
+                if ($wildcard === '*') {
+                    $aTerm = substr($aTerm, 0, -1);
+                } else {
+                    $wildcard = '';
+                }
+                // Eliminate search terms which are too short (except if wildcard is used)
+                if ($wildcard === '*' || strlen($aTerm) >= $this->configuration['fullTextMinimumWordLength']) {
+                    $termsProcessed[] = $operator . addslashes($aTerm) . $wildcard;
                 }
             }
         }
-        return implode(' ', $termsProcessed);
+        // Assemble the processed string
+        $processedSearchString = implode(' ', $termsProcessed);
+        // If double-quoted or brackets-wrapped terms had been extracted, put them back
+        if (count($searches) > 0) {
+            // Escape every string before replacing it again
+            $searches = array_map('addslashes', $searches);
+            $processedSearchString = str_replace($replacements, $searches, $processedSearchString);
+        }
+        return $processedSearchString;
     }
 }

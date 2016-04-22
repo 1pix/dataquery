@@ -44,6 +44,8 @@ fulltext query requires several components.
    boolean search, the latter a natural language search. Please refer
    to the `MySQL documentation for more details <http://dev.mysql.com/doc/refman/5.6/en/fulltext-search.html>`_.
 
+   All operators are supported except for the distance operator (:code:`@`).
+
    .. note::
 
       Query expansion is currently not supported.
