@@ -14,8 +14,9 @@ namespace Tesseract\Dataquery\Ajax;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Tesseract\Dataquery\Parser\QueryParser;
-use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -23,7 +24,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * This class answers to AJAX calls from the 'dataquery' extension.
  *
- * @author Fabien Udriot <fabien.udriot@ecodev.ch>
+ * @author Francois Suter <typo3@cobweb.ch>
  * @package TYPO3
  * @subpackage tx_dataquery
  */
@@ -35,12 +36,15 @@ class AjaxHandler
      * or error messages from exceptions should any have been thrown
      * during query parsing.
      *
-     * @param array $parameters Empty array (yes, that's weird but true)
-     * @param AjaxRequestHandler $ajaxObj Back-reference to the calling object
-     * @return    void
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
      */
-    public function validate($parameters, AjaxRequestHandler $ajaxObj)
+    public function validateAction(ServerRequestInterface $request, ResponseInterface $response)
     {
+        $requestParameters = $request->getQueryParams();
+        $query = $requestParameters['query'];
+
         $flashMessageQueue = GeneralUtility::makeInstance(
                 FlashMessageQueue::class,
                 'tx_datafilter_ajax'
@@ -55,7 +59,6 @@ class AjaxHandler
         // Try parsing and building the query
         try {
             // Get the query to parse from the GET/POST parameters
-            $query = GeneralUtility::_GP('query');
             // Create an instance of the parser
             // NOTE: NULL is passed for the parent object as there's no controller in this context,
             // but that's a bit risky. Maybe extension "tesseract" could provide a dummy controller
@@ -136,9 +139,12 @@ class AjaxHandler
             );
             $flashMessageQueue->enqueue($flashMessage);
         }
-        $ajaxObj->addContent(
-                'dataquery',
-                $flashMessageQueue->renderFlashMessages()
+        // Send the response
+        $response->getBody()->write(
+                json_encode(
+                        $flashMessageQueue->renderFlashMessages()
+                )
         );
+        return $response;
     }
 }

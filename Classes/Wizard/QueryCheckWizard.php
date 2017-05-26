@@ -14,8 +14,8 @@ namespace Tesseract\Dataquery\Wizard;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Form\Element\TextElement;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Wizard for checking the validity and the results of a SQL query.
@@ -24,48 +24,43 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  * @package TYPO3
  * @subpackage tx_dataquery
  */
-class QueryCheckWizard
+class QueryCheckWizard implements \TYPO3\CMS\Backend\Form\NodeInterface
 {
+    /**
+     * @var array Field data
+     */
+    protected $fieldData = [];
+
+    public function __construct(\TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory, array $data)
+    {
+        $this->fieldData = $data;
+    }
 
     /**
      * Renders the wizard itself.
      *
-     * @param array $fieldParameters Parameters of the field
-     * @param TextElement $textField Calling object
-     * @return string HTML for the wizard
+     * @return array As defined in initializeResultArray() of AbstractNode
      */
-    public function render($fieldParameters, TextElement $textField)
+    public function render()
     {
-        // Get the id attribute of the field tag
-        preg_match('/id="(.+?)"/', $fieldParameters['item'], $matches);
+        // Get the wizard template
+        $wizardTemplate = GeneralUtility::makeInstance(StandaloneView::class);
+        $wizardTemplate->setTemplatePathAndFilename('EXT:dataquery/Resources/Private/Templates/QueryCheckWizard.html');
 
-        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
-        $pageRenderer = $GLOBALS['SOBE']->doc->getPageRenderer();
-        $extensionRelativePath = ExtensionManagementUtility::extRelPath('dataquery');
-        // Add specific CSS
-        $pageRenderer->addCssFile(
-                $extensionRelativePath . 'Resources/Public/Styles/CheckWizard.css'
-        );
-        // Load the necessary JavaScript
-        $pageRenderer->addJsFile(
-                $extensionRelativePath . 'Resources/Public/JavaScript/CheckWizard.js'
-        );
-        // Load some localized labels, plus the field's id
-        $pageRenderer->addJsInlineCode(
-                'tx_dataquery_wizard',
-                'var TX_DATAQUERY = {
-				fieldId : "' . $matches[1] . '",
-				labels : {
-					"debugTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.debugTab') . '",
-					"previewTab" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.previewTab') . '",
-					"validateButton" : "' . $GLOBALS['LANG']->sL('LLL:EXT:dataquery/Resources/Private/Language/locallang.xlf:wizard.check.validateButton') . '"
-				}
-			};'
-        );
-        // First of all render the button that will show/hide the rest of the wizard
-        $wizard = '';
-        // Assemble the base HTML for the wizard
-        $wizard .= '<div id="tx_dataquery_wizardContainer"></div>';
-        return $wizard;
+        // Register resources for wizard rendering
+        return [
+                'additionalJavaScriptPost' => [],
+                'additionalJavaScriptSubmit' => [],
+                'additionalHiddenFields' => [],
+                'additionalInlineLanguageLabelFiles' => [],
+                'stylesheetFiles' => [
+                        'EXT:dataquery/Resources/Public/Styles/CheckWizard.css'
+                ],
+                'requireJsModules' => [
+                        'TYPO3/CMS/Dataquery/QueryCheckWizard'
+                ],
+                'inlineData' => [],
+                'html' => $wizardTemplate->render()
+        ];
     }
 }
