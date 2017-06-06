@@ -22,20 +22,20 @@ $EM_CONF[$_EXTKEY] = array (
   'clearCacheOnLoad' => 0,
   'author_company' => '',
   'version' => '2.1.0',
-  'constraints' => 
+  'constraints' =>
   array (
-    'depends' => 
+    'depends' =>
     array (
-      'typo3' => '7.6.0-9.99.99',
+      'typo3' => '7.6.0-8.99.99',
       'tesseract' => '2.0.0-0.0.0',
       'datafilter' => '2.0.0-0.0.0',
       'overlays' => '3.0.0-0.0.0',
       'expressions' => '2.0.0-0.0.0',
     ),
-    'conflicts' => 
+    'conflicts' =>
     array (
     ),
-    'suggests' => 
+    'suggests' =>
     array (
       'devlog' => '',
       'cachecleaner' => '',
