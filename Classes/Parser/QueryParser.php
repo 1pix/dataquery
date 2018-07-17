@@ -508,7 +508,7 @@ class QueryParser
             // to re-implement a better t3lib_page::enableFields()
             // Adding the "." in the replacement reduces the risks
             if ($this->queryObject->mainTable != $trueTableName) {
-                $enableClause = str_replace($trueTableName . '.', $this->queryObject->mainTable . '.', $enableClause);
+                $enableClause = $this->replaceTableNameByAlias($enableClause, $trueTableName, $this->queryObject->mainTable);
             }
             $this->addWhereClause($enableClause);
 
@@ -528,7 +528,7 @@ class QueryParser
                     );
                     if (!empty($enableClause)) {
                         if ($table != $joinData['alias']) {
-                            $enableClause = str_replace($table . '.', $joinData['alias'] . '.', $enableClause);
+                            $enableClause = $this->replaceTableNameByAlias($enableClause, $table, $joinData['alias']);
                         }
                         $this->addOnClause($enableClause, $joinData['alias']);
                     }
@@ -614,6 +614,20 @@ class QueryParser
             }
         }
         //\TYPO3\CMS\Core\Utility\DebugUtility::debug($this->doOverlays);
+    }
+
+    /**
+     * Replaces the true table name by it's alias in the given query.
+     * Replacement regex handles the case where tablename is followed immediately by a dot or by a single quote
+     * ie. tt_content.header and `tt_content`.`header` will be equally replaced.
+     * @param string $query
+     * @param string $trueTableName
+     * @param string $alias
+     * @return string
+     */
+    public function replaceTableNameByAlias($query, $trueTableName, $alias) {
+        $pattern = '/(' . $trueTableName . ')(`?\.)/';
+        return preg_replace($pattern, $alias . '$2', $query);
     }
 
     /**
