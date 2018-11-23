@@ -413,7 +413,7 @@ class DataProvider extends ProviderBase
                     //\TYPO3\CMS\Core\Utility\DebugUtility::debug($finalRecordset, 'Recordset with fixed order');
 
                     // Sort recordset according to fixed order
-                    usort($finalRecordset, array('tx_dataquery_wrapper', 'sortUsingFixedOrder'));
+                    usort($finalRecordset, array(self::class, 'sortUsingFixedOrder'));
                 }
                 //\TYPO3\CMS\Core\Utility\DebugUtility::debug($finalRecordset, 'Recordset after sorting (no overlays)');
 
@@ -569,12 +569,12 @@ class DataProvider extends ProviderBase
                     }
                     //\TYPO3\CMS\Core\Utility\DebugUtility::debug(self::$sortingFields, 'Sorting fields');
                     self::$sortingLevel = 0;
-                    usort($finalRecordset, array('tx_dataquery_wrapper', 'sortRecordset'));
+                    usort($finalRecordset, array(self::class, 'sortRecordset'));
                     //\TYPO3\CMS\Core\Utility\DebugUtility::debug($finalRecordset, 'Sorted, overlaid recordset');
 
                     // If no sorting is defined at all, perform fixed order sorting, if defined
                 } elseif (!$this->sqlParser->hasOrdering() && isset($this->structure['uidList'])) {
-                    usort($finalRecordset, array('tx_dataquery_wrapper', 'sortUsingFixedOrder'));
+                    usort($finalRecordset, array(self::class, 'sortUsingFixedOrder'));
                 }
             } // End of translation handling
 
@@ -770,7 +770,7 @@ class DataProvider extends ProviderBase
      *
      * @param mysqli_result $res Database resource from the executed query
      * @return array A recordset-type data structure
-     * @see tx_dataquery_wrapper::prepareFullStructure()
+     * @see DataProvider::prepareFullStructure()
      */
     protected function assembleRecordsetStructure($res)
     {

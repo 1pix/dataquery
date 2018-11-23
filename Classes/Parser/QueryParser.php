@@ -247,7 +247,7 @@ class QueryParser
             //
             //	4b-2)	like 4a-2) above, but for subtables
             //
-            // The $ sign is used in class tx_dataquery_wrapper for building the data structure
+            // The $ sign is used in class DataProvider for building the data structure
             // Initialize values
             $mappedField = '';
             $mappedTable = '';
