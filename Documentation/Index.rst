@@ -27,7 +27,7 @@ SQL-based Data Query
 		  tesseract, sql, database, data consumer
 
 	:Copyright:
-		  2007-2017
+		  2007-2019
 
 	:Author:
 		  François Suter (Cobweb)

@@ -1,3 +1,15 @@
+2019-02-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released to TER as version 2.1.2
+
+2018-11-23 Julien Henchoz (Cobweb)  <typo3@cobweb.ch>
+
+	* Replaced deprecated calls
+
+2018-07-17 Julien Henchoz (Cobweb)  <typo3@cobweb.ch>
+
+	* Fixed query alias replacement
+
 2017-06-06 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Released to TER as version 2.1.0

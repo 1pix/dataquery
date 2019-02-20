@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2007-2017
+  copyright: 2007-2019
   project: Data Query
   version: 2.1
-  release: 2.1.1
+  release: 2.1.2
   latex_documents:
   - - Index
     - dataquery.tex
