@@ -1,3 +1,7 @@
+2019-06-04 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Add missing workspsace-related field, resolves #1
+
 2019-02-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Released to TER as version 2.1.2
