@@ -1,5 +1,5 @@
 {
-	"name": "tesseract/dataquery",
+	"name": "1pix/dataquery",
 	"type": "typo3-cms-extension",
 	"description": "Assembles a query on data stored in the TYPO3 CMS local database, automatically enforcing criteria like language, publication date, etc. More info on http://www.typo3-tesseract.com/",
 	"license": [
