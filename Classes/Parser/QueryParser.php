@@ -810,7 +810,8 @@ class QueryParser
             $this->addWhereClause($filter['rawSQL']);
         }
         // Handle the order by clauses
-        if (count($filter['orderby']) > 0) {
+        // NOTE: @onpeixel 2020.06.08
+        if (is_iterable($filter['orderby']) && count($filter['orderby']) > 0) {
             foreach ($filter['orderby'] as $orderData) {
                 // Special case if ordering is random
                 if ($orderData['order'] === 'RAND') {
