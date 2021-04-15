@@ -1,11 +1,4 @@
 {
-	 "repositories": [{
-		"type": "vcs",
-		"url": "https://github.com/1pix/overlays.git"
-	}, {
-		"type": "vcs",
-		"url": "https://github.com/1pix/expressions.git"
-	}],
 	"name": "1pix/dataquery",
 	"type": "typo3-cms-extension",
 	"description": "Assembles a query on data stored in the TYPO3 CMS local database, automatically enforcing criteria like language, publication date, etc. More info on http://www.typo3-tesseract.com/",
